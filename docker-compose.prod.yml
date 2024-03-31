@@ -25,6 +25,8 @@ services:
       - ./.env
     depends_on:
       - db
+    environment:
+      - DEBUG=false
 
   db:
     image: postgres:16.1-alpine
