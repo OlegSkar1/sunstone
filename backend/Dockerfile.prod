@@ -2,6 +2,9 @@ FROM python:3.11
 
 RUN apt-get update && apt-get install -y netcat-traditional
 
+RUN mkdir ./static
+RUN mkdir ./media
+
 WORKDIR /app
 
 COPY pyproject.toml poetry.lock ./
@@ -20,12 +23,12 @@ ARG INSTALL_DEV=false
 
 RUN curl -sSL https://install.python-poetry.org | python3 - --version $POETRY_VERSION
 
-COPY ./entrypoint.sh .
-RUN sed -i 's/\r$//g' ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+COPY ./entrypoint.prod.sh .
+RUN sed -i 's/\r$//g'  ./entrypoint.prod.sh
+RUN chmod +x  ./entrypoint.prod.sh
 
 COPY . .
 
 RUN poetry install --no-dev
 
-ENTRYPOINT ["sh", "./entrypoint.sh"]
+ENTRYPOINT ["sh", "./entrypoint.prod.sh"]

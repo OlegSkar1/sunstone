@@ -6,7 +6,7 @@ from ..models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=False)
+    email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True)
 
     def create(self, validated_data) -> AbstractBaseUser:
@@ -24,4 +24,4 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("username", "email", "password")
+        fields = ("email", "password")
