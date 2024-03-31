@@ -2,8 +2,7 @@ FROM python:3.11
 
 RUN apt-get update && apt-get install -y netcat-traditional
 
-RUN mkdir ./static
-RUN mkdir ./media
+RUN mkdir -p ./static ./media
 
 WORKDIR /app
 

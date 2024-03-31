@@ -16,9 +16,9 @@ LOGS_DIR = BASE_DIR / ".logs"
 SECRET_KEY = env("SECRET_KEY")
 TESTING = "test" in argv or any("pytest" in arg for arg in argv)
 
-DEBUG = os.getenv("DEBUG", "True") == "True" and not TESTING
+DEBUG = env.bool("DEBUG", default=True) is True and not TESTING
 
-API_DOCS_ENABLE = env("API_DOCS_ENABLE")
+API_DOCS_ENABLE = env.bool("API_DOCS_ENABLE")
 
 SITE_HOST = env("SITE_HOST")
 

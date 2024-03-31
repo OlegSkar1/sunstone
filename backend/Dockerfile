@@ -26,6 +26,6 @@ RUN chmod +x ./entrypoint.sh
 
 COPY . .
 
-RUN poetry install --no-dev
+RUN poetry install
 
 ENTRYPOINT ["sh", "./entrypoint.sh"]
