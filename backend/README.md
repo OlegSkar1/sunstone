@@ -30,3 +30,15 @@ docker-compose -f docker-compose.prod.yml up -d --build
 docker-compose -f docker-compose.prod.yml exec backend python manage.py migrate --noinput
 docker-compose -f docker-compose.prod.yml exec backend python manage.py collectstatic --no-input --clear
 ```
+
+### SWAGGER
+
+    htttp://localhost:8080/api/docs
+
+### Админ-панель
+
+    htttp://localhost:8080/admin
+
+### Создание суперпользователя
+
+    docker compose exec backend python manage.py createsuperuser
