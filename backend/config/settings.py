@@ -4,8 +4,9 @@ from pathlib import Path
 from envparse import env
 from sys import argv
 
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 BASE_DIR = Path(__file__).resolve().parent.parent
-ENV_FILE = BASE_DIR / ".env"
+ENV_FILE = ROOT_DIR / ".env"
 
 if ENV_FILE.exists():
     env.read_envfile(ENV_FILE)
@@ -31,6 +32,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # ThirdParty
+    "rest_framework",
+    "django_filters",
+    "drf_spectacular",
+    # ThisApp
+    "users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -131,3 +138,5 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "users.User"

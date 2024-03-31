@@ -5,6 +5,7 @@ from django.contrib.auth.admin import UserAdmin
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
+    ordering = ["email"]
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (
