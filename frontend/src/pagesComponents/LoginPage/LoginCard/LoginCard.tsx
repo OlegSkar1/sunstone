@@ -66,9 +66,11 @@ export const LoginCard = () => {
     });
 
     if (res && !res.error) {
-      setIsLoading(false);
       router.push(callbackUrl);
-    } else console.log(res);
+    } else {
+      console.log(res);
+    }
+    setIsLoading(false);
   };
   return (
     <form
