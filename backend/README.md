@@ -27,8 +27,6 @@
 Выполнить в корне проекта:
 ```bash
 docker-compose -f docker-compose.prod.yml up -d --build
-docker-compose -f docker-compose.prod.yml exec backend python manage.py migrate --noinput
-docker-compose -f docker-compose.prod.yml exec backend python manage.py collectstatic --no-input --clear
 ```
 
 ### SWAGGER
