@@ -26,7 +26,8 @@ ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
     f"http://{SITE_HOST}:8080",
     f"http://{SITE_HOST}:3000",
-    f"localhost:3000",
+    f"http://localhost:3000",
+    f"http://localhost:8000",
 ]
 
 INSTALLED_APPS = [
