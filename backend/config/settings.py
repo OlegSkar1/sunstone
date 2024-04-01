@@ -23,7 +23,11 @@ API_DOCS_ENABLE = env.bool("API_DOCS_ENABLE")
 SITE_HOST = env("SITE_HOST")
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = [f"http://{SITE_HOST}"]
+CSRF_TRUSTED_ORIGINS = [
+    f"http://{SITE_HOST}:8080",
+    f"http://{SITE_HOST}:3000",
+    f"localhost:3000",
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
