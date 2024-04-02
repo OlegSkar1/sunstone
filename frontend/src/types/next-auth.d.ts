@@ -2,11 +2,18 @@ import NextAuth from 'next-auth';
 
 declare module 'next-auth' {
   interface User {
-    access_token: string;
-    refresh_token: string;
+    access: string;
+    refresh: string;
+    id?: string;
   }
 
   interface Session {
+    user: {
+      access_token: string;
+      name: string;
+      email: string;
+      image: string;
+    };
     error?: 'RefreshAccessTokenError';
   }
 }

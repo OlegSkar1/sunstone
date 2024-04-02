@@ -8,7 +8,8 @@ export default function Home() {
   return (
     <main>
       <div className="mb-10">Main page</div>
-      <h1>{data?.user?.name}</h1>
+      <h1>{data?.user?.email}</h1>
+      <h2>{data?.user?.access_token}</h2>
       {data?.user?.image && (
         <Image
           src={data?.user?.image}

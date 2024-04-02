@@ -3,16 +3,17 @@
 import { Input } from '@nextui-org/react';
 import { Button } from '@nextui-org/button';
 import Link from 'next/link';
-import { Controller, RegisterOptions, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { defaultRules } from '@/utils/consts/validation.const';
 import { regExpHelper } from '@/utils/helpers/regExp.helper';
 import { PasswordInput } from '@/components/UI/Input/PasswordInput';
 import { Divider } from '@/components/UI/Divider';
-import Image from 'next/image';
 import { AuthButton } from '@/components/UI/AuthButton/AuthButton';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { variantsWithHeight } from '@/utils/consts/animations.const';
 
 interface IFormType {
   email: string;
@@ -48,6 +49,7 @@ export const LoginCard = () => {
     formState: { errors, isValid },
     handleSubmit,
     control,
+    setError,
   } = useForm<IFormType>({
     mode: 'all',
     delayError: 1000,
@@ -64,11 +66,11 @@ export const LoginCard = () => {
       password: data.password,
       redirect: false,
     });
-
+    console.log('response', res);
     if (res && !res.error) {
       router.push(callbackUrl);
     } else {
-      console.log(res);
+      setError('root', { message: 'Пользователь не существует' });
     }
     setIsLoading(false);
   };
@@ -145,6 +147,19 @@ export const LoginCard = () => {
       >
         Войти
       </Button>
+      {errors.root && (
+        <AnimatePresence mode="wait">
+          <motion.span
+            variants={variantsWithHeight}
+            initial="hide"
+            animate="show"
+            exit="hide"
+            className="text-warning -mt-7 mb-4 text-small"
+          >
+            Не верный email или пароль, попробуйте еще раз
+          </motion.span>
+        </AnimatePresence>
+      )}
       <Divider text="или" classNameWrapper="pb-10" />
       <div className="flex sm:flex-row flex-col justify-between gap-4 w-full">
         <AuthButton
