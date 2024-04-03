@@ -5,11 +5,13 @@ import Link from 'next/link';
 
 export default function Home() {
   const { data } = useSession();
+  console.log('dada', data);
+
   return (
     <main>
       <div className="mb-10">Main page</div>
-      <h1>{data?.user?.email}</h1>
-      <h2>{data?.user?.access_token}</h2>
+      <h1>{data?.user?.exp}</h1>
+      <p>{data?.error}</p>
       {data?.user?.image && (
         <Image
           src={data?.user?.image}

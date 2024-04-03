@@ -8,4 +8,11 @@ export const authService = {
       body,
     });
   },
+  async refreshToken(body: RefreshTokenDto) {
+    return await fetchConfig<RefreshTokenModel>({
+      route: '/api/users/token/refresh/',
+      method: 'POST',
+      body,
+    });
+  },
 };

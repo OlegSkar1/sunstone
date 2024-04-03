@@ -3,3 +3,8 @@ declare interface SignInModel {
   refresh: string;
   detail?: string;
 }
+
+declare interface RefreshTokenModel {
+  access: string;
+  detail?: string;
+}

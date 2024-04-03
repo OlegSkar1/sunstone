@@ -3,6 +3,43 @@ import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { fetchConfig } from './fetchConfig';
 import { authService } from '@/services/auth.service';
+import { JWT } from 'next-auth/jwt';
+import { signOut } from 'next-auth/react';
+
+const refreshAccessToken = async (token: JWT): Promise<JWT> => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/token/refresh/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refresh: token.refresh_token }),
+      }
+    );
+
+    const refreshedTokens = await res.json();
+
+    if (!res.ok) {
+      throw refreshedTokens;
+    }
+
+    console.log('refresh', refreshedTokens);
+
+    return {
+      ...token,
+      access_token: refreshedTokens.access,
+    };
+  } catch (error: any) {
+    console.log('error', error);
+
+    return {
+      ...token,
+      error: 'RefreshAccessTokenError',
+    };
+  }
+};
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -22,17 +59,19 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        console.log(credentials);
-
         const res = await authService.signIn(credentials);
 
-        console.log('res', res);
+        // console.log('res', res);
         if (res.access) return res;
 
         return null;
       },
     }),
   ],
+  session: {
+    strategy: 'jwt',
+    maxAge: 10,
+  },
   callbacks: {
     async signIn({ user, credentials, account, email, profile }) {
       if (credentials) {
@@ -40,22 +79,40 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async session({ session, token, user }) {
-      console.log('user', user);
-      console.log('token', token);
-      console.log('session', session);
-      session.error = token.error;
-      session.user.access_token = token.access_token;
+    async session({ session, token }) {
+      if (token) {
+        session.error = token.error;
+        session.user.exp = token.exp as number;
+        session.user.email = token.email as string;
+      }
       return session;
     },
     async jwt({ token, user }) {
+      // console.log('user1', user);
+      // console.log('token1', token);
+
       if (user) {
-        token.access_token = user.access;
+        console.log('test user');
+        return {
+          access_token: user.access,
+          refresh_token: user.refresh,
+          exp: token.exp,
+        };
       }
-      return token;
+      console.log(token);
+
+      if (Date.now().valueOf() < (token.exp * 1000).valueOf()) {
+        console.log('test');
+        return token;
+      }
+
+      // console.log('token111', token);
+
+      return refreshAccessToken(token);
     },
   },
   pages: {
     signIn: '/signin',
+    signOut: '/',
   },
 };
