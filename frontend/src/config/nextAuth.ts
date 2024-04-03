@@ -1,12 +1,15 @@
-import { NextAuthOptions, TokenSet } from 'next-auth';
+import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { fetchConfig } from './fetchConfig';
 import { authService } from '@/services/auth.service';
 import { JWT } from 'next-auth/jwt';
 import { signOut } from 'next-auth/react';
+import utc from 'dayjs/plugin/utc';
+import dayjs from 'dayjs';
 
-const refreshAccessToken = async (token: JWT): Promise<JWT> => {
+dayjs.extend(utc);
+
+export const refreshAccessToken = async (token: JWT): Promise<JWT> => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/token/refresh/`,
@@ -25,17 +28,19 @@ const refreshAccessToken = async (token: JWT): Promise<JWT> => {
       throw refreshedTokens;
     }
 
-    console.log('refresh', refreshedTokens);
-
     return {
       ...token,
       access_token: refreshedTokens.access,
+      access_expires_at: refreshedTokens.expires_at,
     };
   } catch (error: any) {
     console.log('error', error);
 
+    await signOut();
+
     return {
       ...token,
+      access_token: '',
       error: 'RefreshAccessTokenError',
     };
   }
@@ -61,19 +66,14 @@ export const authOptions: NextAuthOptions = {
 
         const res = await authService.signIn(credentials);
 
-        // console.log('res', res);
         if (res.access) return res;
 
         return null;
       },
     }),
   ],
-  session: {
-    strategy: 'jwt',
-    maxAge: 10,
-  },
   callbacks: {
-    async signIn({ user, credentials, account, email, profile }) {
+    async signIn({ user, credentials }) {
       if (credentials) {
         user.email = credentials.email as string;
       }
@@ -82,31 +82,27 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.error = token.error;
-        session.user.exp = token.exp as number;
-        session.user.email = token.email as string;
+        session.user.expires_at = token.access_expires_at;
+        session.user.email = token.email;
       }
       return session;
     },
     async jwt({ token, user }) {
-      // console.log('user1', user);
-      // console.log('token1', token);
-
       if (user) {
-        console.log('test user');
         return {
           access_token: user.access,
           refresh_token: user.refresh,
-          exp: token.exp,
+          access_expires_at: user.access_expires_at,
+          refresh_expires_at: user.refresh_expires_at,
+          email: user.email as string,
         };
       }
-      console.log(token);
 
-      if (Date.now().valueOf() < (token.exp * 1000).valueOf()) {
-        console.log('test');
+      if (
+        dayjs.utc().valueOf() < dayjs.utc(token.access_expires_at).valueOf()
+      ) {
         return token;
       }
-
-      // console.log('token111', token);
 
       return refreshAccessToken(token);
     },

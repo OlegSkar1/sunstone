@@ -4,17 +4,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Home() {
-  const { data } = useSession();
-  console.log('dada', data);
+  const { data: session } = useSession();
+  console.log('data', session);
 
   return (
     <main>
       <div className="mb-10">Main page</div>
-      <h1>{data?.user?.exp}</h1>
-      <p>{data?.error}</p>
-      {data?.user?.image && (
+      <h2>{session?.user.email}</h2>
+      <p>{session?.error}</p>
+      {session?.user?.image && (
         <Image
-          src={data?.user?.image}
+          src={session?.user?.image}
           alt="user"
           width={48}
           height={48}
@@ -25,6 +25,7 @@ export default function Home() {
       <Link href="/about" className="text-secondary hover:text-primary pr-10">
         About Page
       </Link>
+
       <Link href="/signin" className="text-secondary hover:text-primary pr-10">
         login
       </Link>

@@ -8,7 +8,6 @@ export async function middleware(
 ) {
   const token = await getToken({ req });
   const isAuthenticated = !!token;
-  console.log('isAuth', isAuthenticated);
 
   //Authenticated conditionals
   if (req.nextUrl.pathname.startsWith('/signin') && isAuthenticated) {
@@ -42,5 +41,5 @@ export async function middleware(
 }
 
 export const config = {
-  matcher: ['/about'],
+  matcher: ['/about', '/signin', '/signup'],
 };
