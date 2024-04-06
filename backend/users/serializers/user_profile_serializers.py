@@ -24,12 +24,14 @@ class UserProfileDetailSerializer(UserProfileListSerializer):
     """Сериализатор детального профиля пользователя"""
 
     user_materials = serializers.SerializerMethodField()
+    user_email = serializers.ReadOnlyField(source="user.email", read_only=True)
     avatar_display = MultiImageField(required=False, read_only=True)
     avatar_preview = MultiImageField(required=False, read_only=True)
 
     class Meta(UserProfileListSerializer.Meta):
         fields = (
             UserProfileListSerializer.Meta.fields + (
+                "user_email",
                 "avatar_display",
                 "avatar_preview",
                 "user_materials",
