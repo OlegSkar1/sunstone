@@ -31,11 +31,11 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 ### SWAGGER
 
-    htttp://localhost:8080/api/docs
+    htttp://localhost/api/docs
 
 ### Админ-панель
 
-    htttp://localhost:8080/admin
+    htttp://localhost/admin
 
 ### Создание суперпользователя
 
