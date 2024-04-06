@@ -6,7 +6,7 @@ from materials.models import Material
 
 class MaterialFilter(FilterSet):
     author_filter = CharFilter(field_name="author", label="Фильтр по автору")
-    section_filter = CharFilter(field_name="section__slug", label="Фильтр по разделу")
+    section_filter = CharFilter(field_name="section__slug", label="Фильтр по слагу раздела")
     update_date_filter = DateRangeFilter(field_name="update_date", label="Фильтр по времени изменения")
 
     class Meta:

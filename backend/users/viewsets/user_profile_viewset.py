@@ -9,6 +9,8 @@ from sections.pagination import SectionPagination
 
 
 class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
+    """Профили пользователей"""
+
     queryset = UserProfile.objects.select_related("user")
     permission_classes = [IsAuthenticated]
     pagination_class = SectionPagination

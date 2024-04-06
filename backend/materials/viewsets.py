@@ -11,6 +11,8 @@ from .filters import MaterialFilter
 
 @extend_schema(tags=["Materials"])
 class MaterialViewSet(viewsets.ReadOnlyModelViewSet):
+    """Материалы для обучения"""
+
     pagination_class = SectionPagination
     permission_classes = [IsAuthenticated]
     filterset_class = MaterialFilter
