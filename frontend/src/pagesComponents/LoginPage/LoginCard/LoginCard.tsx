@@ -76,20 +76,11 @@ export const LoginCard = () => {
     setIsLoading(false);
   };
 
-  const buttonHandler = async () => {
-    await signIn('CredentialsSignIn', {
-      email: 'test@test.ru',
-      password: 'Easy777!',
-      redirect: false,
-    });
-    router.push(callbackUrl);
-  };
   return (
     <form
       onSubmit={handleSubmit(handleLogin)}
       className=" rounded-xl bg-white py-5 px-10 flex flex-col items-center shadow-lg"
     >
-      <Button onClick={buttonHandler}>test</Button>
       <span className="text-xl font-semibold pb-4">Войти</span>
       <span className="text-small pb-6">
         Еще нет аккаунта?{' '}
