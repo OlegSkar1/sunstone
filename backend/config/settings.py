@@ -24,8 +24,15 @@ API_DOCS_ENABLE = env.bool("API_DOCS_ENABLE")
 SITE_HOST = env("SITE_HOST")
 
 ALLOWED_HOSTS = ["*"]
+
+CORS_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+CORS_ALLOW_ALL_ORIGINS = False
+
 CSRF_TRUSTED_ORIGINS = [
-    f"http://{SITE_HOST}:8080",
+    f"http://{SITE_HOST}:80",
     f"http://{SITE_HOST}:3000",
     f"http://localhost:3000",
     f"http://localhost:8000",
@@ -45,6 +52,7 @@ INSTALLED_APPS = [
     "django_user_agents",
     "imagekit",
     "django_ckeditor_5",
+    "corsheaders",
     # ThisApp
     "users.apps.UsersConfig",
     "sections.apps.SectionsConfig",
@@ -60,6 +68,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_user_agents.middleware.UserAgentMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
