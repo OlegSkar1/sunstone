@@ -1,6 +1,8 @@
 from django.db.models import Prefetch
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from materials.models import Material
 from users.models import UserProfile
@@ -29,12 +31,31 @@ class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
                         )
                     )
                 )
+            case self.myprofile.__name__:
+                queryset = (
+                    queryset
+                    .filter(user=self.request.user)
+                    .prefetch_related(
+                        Prefetch(
+                            "user__materials",
+                            queryset=Material.objects.filter(author=self.request.user)
+                        )
+                    )
+                )
 
         return queryset
 
+    @action(detail=False, methods=["GET"])
+    def myprofile(self, request, *args, **kwargs):
+        """Профиль текущего авторизованного пользователя"""
+
+        queryset = self.get_queryset().first()
+        serializer = self.get_serializer(queryset, many=False)
+        return Response(serializer.data)
+
     def get_serializer_class(self):
         match self.action:
-            case self.retrieve.__name__:
+            case self.retrieve.__name__ | self.myprofile.__name__:
                 return UserProfileDetailSerializer
             case self.list.__name__:
                 return UserProfileListSerializer
