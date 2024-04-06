@@ -1,15 +1,28 @@
-import NextUIProvider from '@/components/NextUIProvider';
-import SessionProvider from '@/components/SessionProvider';
+'use client';
 import { authOptions } from '@/config/nextAuth';
+import { NextUIProvider } from '@nextui-org/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getServerSession } from 'next-auth';
-import { signOut } from 'next-auth/react';
+import { SessionProvider, signOut } from 'next-auth/react';
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      gcTime: Infinity,
+      retry: false,
+    },
+  },
+});
 
 export async function Providers({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
   if (session?.error === 'RefreshAccessTokenError') signOut();
   return (
-    <SessionProvider session={session}>
-      <NextUIProvider>{children}</NextUIProvider>
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider session={session}>
+        <NextUIProvider>{children}</NextUIProvider>
+      </SessionProvider>
+    </QueryClientProvider>
   );
 }

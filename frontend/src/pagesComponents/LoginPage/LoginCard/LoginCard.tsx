@@ -78,7 +78,7 @@ export const LoginCard = () => {
 
   const buttonHandler = async () => {
     await signIn('CredentialsSignIn', {
-      email: 'user@example.com',
+      email: 'test@test.ru',
       password: 'Easy777!',
       redirect: false,
     });
