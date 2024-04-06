@@ -4,7 +4,7 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - 8080:80
+      - 80:80
     volumes:
       - static:/app/static
       - media:/app/media
@@ -27,6 +27,7 @@ services:
       - DEBUG=false
     depends_on:
       - db
+      - memcached
 
   db:
     image: postgres:16.1-alpine
@@ -38,6 +39,12 @@ services:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - POSTGRES_NAME=$POSTGRES_NAME
+
+  memcached:
+    image: memcached:alpine
+    ports:
+      - "11211:11211"
+    command: [ "memcached" ]
 
 volumes:
   postgres_data:
