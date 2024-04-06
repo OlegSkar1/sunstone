@@ -5,4 +5,4 @@ from .models import Section
 
 @admin.register(Section)
 class SectionAdmin(admin.ModelAdmin):
-    pass
+    prepopulated_fields = {"slug": ("name",)}

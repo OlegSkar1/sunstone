@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # ThisApp
     "users.apps.UsersConfig",
     "sections.apps.SectionsConfig",
+    "materials.apps.MaterialsConfig",
 ]
 
 MIDDLEWARE = [

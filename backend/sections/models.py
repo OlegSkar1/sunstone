@@ -14,6 +14,10 @@ class Section(models.Model, metaclass=MultiImageMeta):
         verbose_name="Название",
         max_length=128,
     )
+    slug = models.SlugField(
+        verbose_name="Алиас",
+        unique=True
+    )
     description = CKEditor5Field(
         verbose_name="Описание",
         blank=True,

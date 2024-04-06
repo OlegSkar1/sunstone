@@ -1,6 +1,11 @@
-from .models import User
+from .models import User, UserProfile
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+
+
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    classes = ["collapse"]
 
 
 @admin.register(User)
@@ -25,3 +30,4 @@ class UserAdmin(UserAdmin):
             },
         ),
     )
+    inlines = [UserProfileInline]
