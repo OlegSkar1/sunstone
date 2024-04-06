@@ -1,4 +1,5 @@
 from django.db import models
+from django_ckeditor_5.fields import CKEditor5Field
 
 from common.models import MultiImageMeta, Spec
 
@@ -13,7 +14,7 @@ class Section(models.Model, metaclass=MultiImageMeta):
         verbose_name="Название",
         max_length=128,
     )
-    description = models.TextField(
+    description = CKEditor5Field(
         verbose_name="Описание",
         blank=True,
         null=True,
