@@ -6,6 +6,7 @@ from sections.viewsets import SectionViewSet
 from materials.viewsets import MaterialViewSet
 from lessons.viewsets import LessonViewSet
 from testings.viewsets import TestingViewSet, QuestionViewSet
+from common.site_search import SiteSearchViewSet
 
 if settings.API_DOCS_ENABLE:
     router = DefaultRouter()
@@ -19,3 +20,4 @@ router.register("profiles", UserProfileViewSet, basename="profiles")
 router.register("lessons", LessonViewSet, basename="lessons")
 router.register("testings", TestingViewSet, basename="testings")
 router.register("questions", QuestionViewSet, basename="questions")
+router.register("search", SiteSearchViewSet, basename="search")

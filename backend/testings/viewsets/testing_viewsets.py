@@ -34,13 +34,19 @@ class TestingViewSet(viewsets.ReadOnlyModelViewSet):
             case self.retrieve.__name__:
                 queryset = (
                     queryset
-                    .select_related("lesson")
+                    .select_related(
+                        "lesson",
+                        "users_statistics__user",
+                    )
                     .prefetch_related(
                         "questions",
                         "questions__answers",
                         Prefetch(
                             "users_statistics",
-                            queryset=UserTestStatistics.objects.filter(testing=self.kwargs["pk"])
+                            queryset=UserTestStatistics.objects.filter(
+                                testing=self.kwargs["pk"],
+                                user=self.request.user,
+                            )
                         )
                     )
                 )
