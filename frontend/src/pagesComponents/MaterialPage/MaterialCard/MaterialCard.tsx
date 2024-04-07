@@ -7,6 +7,7 @@ import {
 } from '@nextui-org/react';
 import dayjs from 'dayjs';
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { FC } from 'react';
 
@@ -25,32 +26,34 @@ export const MaterialCard: FC<IMaterialCardProps> = ({ card }) => {
   if (!card) return;
 
   return (
-    <Card className="hover:scale-[101%] transition-all h-[350px] max-w-[250px] relative">
-      <CardHeader className="flex-col gap-4">
-        <div className="flex justify-between">
-          <h2
-            dangerouslySetInnerHTML={{ __html: separateTitle ?? '' }}
-            className="text-xl text-start font-bold"
+    <Link href={`/materials/${card.id}`}>
+      <Card className="hover:scale-[101%] transition-all active:scale-[101%] h-[350px] sm:max-w-[250px] max-sm:w-full">
+        <CardHeader className="flex-col gap-4 overflow-hidden">
+          <div className="flex justify-between max-sm:gap-2 max-sm:items-center">
+            <h2
+              dangerouslySetInnerHTML={{ __html: separateTitle ?? '' }}
+              className="text-xl text-start font-bold"
+            />
+            <time
+              dangerouslySetInnerHTML={{ __html: createTime ?? '' }}
+              className="text-small text-foreground whitespace-nowrap"
+            />
+          </div>
+        </CardHeader>
+        <CardBody className="overflow-hidden">
+          <Image
+            src={''}
+            alt={card.title}
+            sizes={'100vw'}
+            width={0}
+            height={0}
+            className="w-full max-h-[150px] object-fill rounded-lg"
           />
-          <time
-            dangerouslySetInnerHTML={{ __html: createTime ?? '' }}
-            className="text-small text-foreground whitespace-nowrap"
-          />
-        </div>
-      </CardHeader>
-      <CardBody className="overflow-hidden">
-        <Image
-          src={''}
-          alt={card.title}
-          sizes={'100vw'}
-          width={0}
-          height={0}
-          className="w-full max-h-[150px] object-fill rounded-lg"
-        />
-      </CardBody>
-      <CardFooter>
-        <p className="font-semibold">{section}</p>
-      </CardFooter>
-    </Card>
+        </CardBody>
+        <CardFooter>
+          <p className="font-semibold">{section}</p>
+        </CardFooter>
+      </Card>
+    </Link>
   );
 };

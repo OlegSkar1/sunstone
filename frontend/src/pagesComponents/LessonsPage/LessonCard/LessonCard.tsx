@@ -4,28 +4,30 @@ import Link from 'next/link';
 import React, { FC } from 'react';
 
 interface ISectionCardProps {
-  card: SectionModel;
+  card: LessonModel | null;
 }
-export const SectionCard: FC<ISectionCardProps> = ({ card }) => {
+export const LessonCard: FC<ISectionCardProps> = ({ card }) => {
   if (!card) return;
   return (
-    <Link href={`/sections/${card?.slug}`}>
-      <Card className="hover:scale-[101%] transition-all active:scale-[101%] h-[350px] sm:max-w-[250px] max-sm:w-full">
+    <Link href={`sections/${card?.id}`}>
+      <Card className="hover:scale-[101%] transition-all h-[350px] max-w-[250px] relative">
         <CardHeader className="flex-col gap-4">
           <h2
-            dangerouslySetInnerHTML={{ __html: card?.name ?? '' }}
+            dangerouslySetInnerHTML={{ __html: card?.title ?? '' }}
             className="text-xl text-start font-bold"
           />
-          <div dangerouslySetInnerHTML={{ __html: card?.description ?? '' }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: card?.material_title ?? '' }}
+          />
         </CardHeader>
         <CardBody className="overflow-hidden">
           <Image
-            src={card.image_display}
-            alt={card.name}
+            src={card.preview_thumbnail}
+            alt={card.title}
             sizes={'100vw'}
             width={0}
             height={0}
-            className="w-full max-h-[150px] object-cover rounded-lg"
+            className="w-full max-h-[150px] object-fill rounded-lg"
           />
         </CardBody>
       </Card>
