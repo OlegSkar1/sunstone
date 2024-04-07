@@ -6,7 +6,7 @@ export const Logo = () => {
     <Link href="/">
       <div className="flex gap-3 items-center">
         <IconLogo />
-        <span className="text-lg font-semibold">Sunstone</span>
+        <span className="text-lg font-semibold max-sm:hidden">Sunstone</span>
       </div>
     </Link>
   );

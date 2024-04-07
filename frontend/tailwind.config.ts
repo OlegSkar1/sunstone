@@ -20,6 +20,9 @@ const config: Config = {
         warning: '#e55d57',
         background: '#d3d5da',
       },
+      gridTemplateColumns: {
+        main: '250px minmax(900px, 1fr)',
+      },
     },
   },
   darkMode: 'class',
