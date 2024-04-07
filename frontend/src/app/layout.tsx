@@ -3,7 +3,6 @@ import './globals.css';
 import { Providers } from './providers';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/config/nextAuth';
-import { signOut } from 'next-auth/react';
 
 export const metadata: Metadata = {
   title: 'Sunstone',

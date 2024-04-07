@@ -13,3 +13,13 @@ export const useMaterialsQuery = (
     queryFn: () => materialsService.getMaterials(params),
     ...options,
   });
+
+export const useSlugMaterialsQuery = (
+  id: string,
+  options?: QueryOptions<AxiosResponse<MaterialModel>>
+) =>
+  useQuery({
+    queryKey: [getMaterials, id],
+    queryFn: () => materialsService.getSlugMaterials(id),
+    ...options,
+  });
