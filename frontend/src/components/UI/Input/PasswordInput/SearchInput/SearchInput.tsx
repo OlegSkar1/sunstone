@@ -2,11 +2,12 @@
 import { searchStore } from '@/store/searchStore';
 import { useDebounceFn } from '@/utils/hooks/useDebounceFn';
 import { Input, InputProps } from '@nextui-org/react';
-import { stat } from 'fs';
+import { usePathname } from 'next/navigation';
 import React, { FC, useEffect, useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 
 export const SearchInput: FC<InputProps> = (props) => {
+  const pathname = usePathname();
   const [value, setValue] = useState('');
   const search = searchStore((state) => state.search);
   const setSearch = searchStore((state) => state.setSearch);
@@ -20,6 +21,11 @@ export const SearchInput: FC<InputProps> = (props) => {
   useEffect(() => {
     !search && setValue('');
   }, [search]);
+
+  useEffect(() => {
+    setValue('');
+    setSearch('');
+  }, [pathname]);
 
   return (
     <Input

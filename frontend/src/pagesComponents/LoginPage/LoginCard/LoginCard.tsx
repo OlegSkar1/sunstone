@@ -67,8 +67,6 @@ export const LoginCard = () => {
 
       redirect: false,
     });
-
-    console.log('response', res);
     if (res && !res.error) {
       router.push(callbackUrl);
     } else {
@@ -163,7 +161,7 @@ export const LoginCard = () => {
           </motion.span>
         </AnimatePresence>
       )}
-      <Divider text="или" classNameWrapper="pb-10" />
+      {/* <Divider text="или" classNameWrapper="pb-10" />
       <div className="flex sm:flex-row flex-col justify-between gap-4 w-full">
         <AuthButton
           src="https://authjs.dev/img/providers/google.svg"
@@ -180,7 +178,7 @@ export const LoginCard = () => {
           width={24}
           height={24}
         />
-      </div>
+      </div> */}
     </form>
   );
 };

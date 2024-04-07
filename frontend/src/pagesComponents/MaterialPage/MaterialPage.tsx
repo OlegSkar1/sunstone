@@ -16,7 +16,9 @@ export default function Material({
   section_slug,
   materials_id,
 }: IMaterialProps) {
-  const { data } = useMaterialsQuery();
+  const { data: material } = useMaterialsQuery({
+    section_filter: section_slug,
+  });
   const query = searchStore((state) => state.search);
   return (
     <>
@@ -24,7 +26,11 @@ export default function Material({
         <SearchList />
       ) : (
         <div>
-          <MaterialInfo />
+          <MaterialInfo
+            material={material?.data.results}
+            section_slug={section_slug}
+            materials_id={materials_id}
+          />
         </div>
       )}
     </>

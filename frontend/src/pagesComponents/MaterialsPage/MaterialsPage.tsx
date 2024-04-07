@@ -6,7 +6,7 @@ import React from 'react';
 import { MaterialCard } from '../MaterialPage/MaterialCard/MaterialCard';
 import { skeletons } from '@/utils/consts/skeleton.const';
 
-export default function Materials({ slug }: { slug: string }) {
+export default function Materials({ slug }: { slug?: string }) {
   const query = searchStore((state) => state.search);
   const { data } = useMaterialsQuery({ section_filter: slug });
 
