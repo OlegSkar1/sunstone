@@ -8,6 +8,7 @@ class MaterialListSerializer(serializers.ModelSerializer):
     """Сериализатор списка материалов"""
 
     image_display = MultiImageField(required=False, read_only=True)
+    section_slug = serializers.ReadOnlyField(source="section.slug", read_only=True)
 
     class Meta:
         model = Material
@@ -17,7 +18,7 @@ class MaterialListSerializer(serializers.ModelSerializer):
             "short_description",
             "image_display",
             "author",
-            "section",
+            "section_slug",
             "created_at",
             "updated_at"
         )

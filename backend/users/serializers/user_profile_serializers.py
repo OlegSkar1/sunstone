@@ -38,8 +38,11 @@ class UserProfileDetailSerializer(UserProfileListSerializer):
             )
         )
 
-    @staticmethod
     @extend_schema_field(OpenApiTypes.OBJECT)
-    def get_user_materials(obj):
-        serializer = MaterialListSerializer(obj.user.materials, many=True)
+    def get_user_materials(self, obj):
+        serializer = MaterialListSerializer(
+            obj.user.materials,
+            many=True,
+            context={"request": self.context.get("request")}
+        )
         return serializer.data
