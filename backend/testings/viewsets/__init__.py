@@ -1,1 +1,2 @@
 from .testing_viewsets import TestingViewSet, QuestionViewSet
+from .testing_statistics_viewsets import TestingStatisticsViewSet
