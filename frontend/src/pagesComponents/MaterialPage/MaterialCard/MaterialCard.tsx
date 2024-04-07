@@ -16,7 +16,6 @@ interface IMaterialCardProps {
 }
 export const MaterialCard: FC<IMaterialCardProps> = ({ card }) => {
   const pathname = usePathname();
-  const section = pathname.split('/').at(-1) ?? '';
   const createTime = dayjs(card?.created_at).format('DD.MM.YYYY');
   const separateTitle =
     card?.title.substring(0, 50).length === card?.title.length
@@ -26,7 +25,7 @@ export const MaterialCard: FC<IMaterialCardProps> = ({ card }) => {
   if (!card) return;
 
   return (
-    <Link href={`/materials/${card.id}`}>
+    <Link href={`/sections/${card.section_slug}/materials/${card.id}`}>
       <Card className="hover:scale-[101%] transition-all active:scale-[101%] h-[350px] sm:max-w-[500px] max-sm:w-full">
         <CardHeader className="flex-col gap-4 overflow-hidden">
           <div className="flex justify-between gap-2 max-sm:items-center w-full">
@@ -54,7 +53,7 @@ export const MaterialCard: FC<IMaterialCardProps> = ({ card }) => {
           />
         </CardBody>
         <CardFooter>
-          <p className="font-semibold">{section}</p>
+          <p className="font-semibold">{card.section_slug}</p>
         </CardFooter>
       </Card>
     </Link>
