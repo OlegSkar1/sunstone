@@ -7,11 +7,16 @@ from rest_framework.response import Response
 
 from sections.pagination import SectionPagination
 
-from testings.models import Testing, Question, UserTestStatistics
-from testings.serializers import QuestionSerializer
-from testings.serializers.testing_serializers import TestingListSerializer, TestingDetailSerializer, \
-    InputAnswerSerializer, AnswerCheckSerializer
-from testings.utils import provide_answer, write_statistic_for_question
+from ..models import Testing, Question, UserTestStatistics
+from ..serializers import (
+    QuestionSerializer,
+    TestingListSerializer,
+    InputAnswerSerializer,
+    AnswerCheckSerializer,
+    TestingDetailSerializer,
+)
+from ..utils import provide_answer, write_statistic_for_question
+from ..filters import TestingFilter
 
 
 @extend_schema(tags=["Testings"])
@@ -21,6 +26,7 @@ class TestingViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Testing.objects.all().order_by('id')
     permission_classes = [IsAuthenticated]
     pagination_class = SectionPagination
+    filterset_class = TestingFilter
 
     def get_queryset(self):
         queryset = self.queryset
@@ -36,7 +42,6 @@ class TestingViewSet(viewsets.ReadOnlyModelViewSet):
                     queryset
                     .select_related(
                         "lesson",
-                        "users_statistics__user",
                     )
                     .prefetch_related(
                         "questions",
