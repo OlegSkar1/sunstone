@@ -3,6 +3,14 @@ from rest_framework import serializers
 from testings.models import Testing, Question, Answer
 
 
+class InputAnswerSerializer(serializers.Serializer):
+    answer = serializers.CharField(required=True)
+
+
+class AnswerCheckSerializer(serializers.Serializer):
+    ok = serializers.BooleanField(required=True)
+
+
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
