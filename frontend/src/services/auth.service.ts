@@ -10,9 +10,12 @@ export const authService = {
     });
   },
   async signUp(body: SignUpDto) {
-    return await api.post<SignUpModel>('/api/users/register/', body);
+    return api.post<SignUpModel>('/api/users/register/', body);
   },
   async refreshToken(body: RefreshTokenDto) {
+    return api.post<RefreshTokenModel>('/api/users/token/refresh/', body);
+  },
+  async fetchRefreshToken(body: RefreshTokenDto) {
     return await fetchConfig<RefreshTokenModel>({
       route: '/api/users/token/refresh/',
       method: 'POST',

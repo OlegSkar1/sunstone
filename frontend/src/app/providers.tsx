@@ -1,4 +1,5 @@
 'use client';
+import AuthProvider from '@/components/AuthProvider/AuthProvider';
 import { NextUIProvider } from '@nextui-org/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Session } from 'next-auth';
@@ -24,7 +25,9 @@ export function Providers({
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider session={session}>
-        <NextUIProvider>{children}</NextUIProvider>
+        <AuthProvider>
+          <NextUIProvider>{children}</NextUIProvider>
+        </AuthProvider>
       </SessionProvider>
     </QueryClientProvider>
   );

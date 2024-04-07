@@ -64,6 +64,7 @@ export const LoginCard = () => {
     const res = await signIn('CredentialsSignIn', {
       email: data.email,
       password: data.password,
+
       redirect: false,
     });
 

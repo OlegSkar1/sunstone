@@ -3,7 +3,6 @@ import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { authService } from '@/services/auth.service';
 import { JWT } from 'next-auth/jwt';
-import { signOut } from 'next-auth/react';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
 
@@ -35,8 +34,6 @@ export const refreshAccessToken = async (token: JWT): Promise<JWT> => {
     };
   } catch (error: any) {
     console.log('error', error);
-
-    await signOut();
 
     return {
       ...token,
@@ -71,6 +68,29 @@ export const authOptions: NextAuthOptions = {
         return null;
       },
     }),
+    CredentialsProvider({
+      id: 'CredentialsRefresh',
+      name: 'CredentialsRefresh',
+      credentials: {
+        access: {},
+        expires_at: {},
+        refresh: {},
+        refresh_expires_at: {},
+      },
+      async authorize(credentials) {
+        if (!credentials) return null;
+
+        if (credentials.access) {
+          return {
+            access: credentials.access,
+            access_expires_at: credentials.expires_at,
+            refresh: credentials.refresh,
+            refresh_expires_at: credentials.refresh_expires_at,
+          };
+        }
+        return null;
+      },
+    }),
   ],
   callbacks: {
     async signIn({ user, credentials }) {
@@ -82,8 +102,11 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.error = token.error;
-        session.user.expires_at = token.access_expires_at;
+        session.user.access_expires_at = token.access_expires_at;
+        session.user.refresh_expires_at = token.refresh_expires_at;
         session.user.email = token.email;
+        session.user.access_token = token.access_token;
+        session.user.refresh_token = token.refresh_token;
       }
       return session;
     },

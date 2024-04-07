@@ -16,7 +16,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOptions);
-  if (session?.error === 'RefreshAccessTokenError') signOut();
+
   return (
     <html lang="ru">
       <body className="container mx-auto bg-background p-10 min-h-screen font-montserrat font-normal text-base">
