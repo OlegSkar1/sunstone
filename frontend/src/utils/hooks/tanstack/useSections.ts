@@ -9,11 +9,7 @@ export const useSectionsQuery = (
   options?: QueryOptions<AxiosResponse<SectionListModel>>
 ) =>
   useQuery({
-    queryKey: [getSections],
-    queryFn: () =>
-      sectionService.getSections({
-        page: params?.page || '1',
-        size: params?.size || '10',
-      }),
+    queryKey: [getSections, params],
+    queryFn: () => sectionService.getSections(params),
     ...options,
   });

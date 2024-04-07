@@ -11,8 +11,6 @@ export const useRefreshToken = () => {
       refresh: session?.user.refresh_token,
     });
 
-    console.log(res);
-
     if (session) {
       session.user.access_token = res.data.access;
       session.user.access_expires_at = res.data.expires_at;
@@ -24,7 +22,7 @@ export const useRefreshToken = () => {
     (response) => response,
     async (error) => {
       const prevRequest = error?.config;
-      if (error?.response?.status === 400 && !prevRequest?.sent) {
+      if (error?.response?.status === 401 && !prevRequest?.sent) {
         prevRequest.sent = true;
         await signOut();
         return api(prevRequest);

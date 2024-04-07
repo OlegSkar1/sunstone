@@ -7,7 +7,7 @@ interface ISectionCardProps {
 }
 export const SectionCard: FC<ISectionCardProps> = ({ card }) => {
   return (
-    <Card className="hover:scale-[101%] transition-all h-[350px] max-w-[250px]">
+    <Card className="hover:scale-[101%] transition-all h-[350px] max-w-[250px] relative">
       <CardHeader className="flex-col gap-4">
         <h2
           dangerouslySetInnerHTML={{ __html: card?.name ?? '' }}

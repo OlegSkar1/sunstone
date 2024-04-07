@@ -7,12 +7,15 @@ import Link from 'next/link';
 export default function Sections() {
   const { data: sections } = useSectionsQuery();
   return (
-    <div className="flex flex-wrap gap-6 pt-10">
-      {sections?.data.results.map((card) => (
-        <Link href={`/sections/${card.slug}`} key={card.slug}>
-          <SectionCard card={card} />
-        </Link>
-      ))}
+    <div className="flex flex-wrap gap-6 pt-10 justify-center relative">
+      {sections?.data.results.map((card) => {
+        console.log(card.slug);
+        return (
+          <Link href={`sections/${card.slug}`} key={card.slug}>
+            <SectionCard card={card} />
+          </Link>
+        );
+      })}
     </div>
   );
 }

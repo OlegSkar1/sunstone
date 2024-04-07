@@ -1,12 +1,10 @@
 import { api } from '@/config/axiosConfig';
 
 export const sectionService = {
-  async getSections({ page, size }: SectionListDto) {
-    return api.get<SectionListModel>(
-      `/api/sections/?page=${page}&size=${size}`
-    );
+  async getSections(params?: SectionListDto) {
+    return api.get<SectionListModel>('/api/sections/', { params });
   },
-  async getSection(slug: number) {
+  async getSection(slug: string) {
     return api.get<SectionModel>(`/api/sections/${slug}/`);
   },
 };

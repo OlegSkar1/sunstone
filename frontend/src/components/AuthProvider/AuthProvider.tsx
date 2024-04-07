@@ -7,6 +7,7 @@ import { FC, PropsWithChildren, useEffect } from 'react';
 const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const { data } = useSession();
   const refreshToken = useRefreshToken();
+
   api.interceptors.request.use(
     (config) => {
       if (!config.headers['Authorization']) {
@@ -44,7 +45,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (data?.error === 'RefreshAccessTokenError') signOut();
-  }, [data]);
+  }, [data?.error]);
 
   return children;
 };

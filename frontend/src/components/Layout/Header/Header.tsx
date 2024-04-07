@@ -61,7 +61,7 @@ export const Header = () => {
       <ProfileDropdown />
       <AnimatePresence mode="wait">
         <NavbarMenu
-          className="pl-16 pt-10 bg-black/10 absolute top-0 left-0 z-9999"
+          className="pl-16 pt-10 bg-black/10 absolute top-0 left-0"
           motionProps={{
             initial: { opacity: 0, height: 0, overflow: 'hidden' },
             animate: { opacity: 1, height: 'auto' },
