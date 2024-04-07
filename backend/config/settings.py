@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "sections.apps.SectionsConfig",
     "materials.apps.MaterialsConfig",
+    "lessons.apps.LessonsConfig",
 ]
 
 MIDDLEWARE = [
