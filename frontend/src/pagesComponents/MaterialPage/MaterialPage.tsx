@@ -4,6 +4,7 @@ import React from 'react';
 import { searchStore } from '@/store/searchStore';
 import SearchList from '@/components/SearchList/SearchList';
 import { MaterialInfo } from './MaterialInfo/MaterialInfo';
+import Link from 'next/link';
 
 interface IMaterialProps {
   section_slug: string;
@@ -27,6 +28,15 @@ export default function Material({
             section_slug={section_slug}
             materials_id={materials_id}
           />
+          <h3 className="text-xl text-center font-semibold">
+            Ознакомиться с лекциями по теме можно по{' '}
+            <Link
+              href={`${materials_id}/lessons`}
+              className="text-secondary hover:underline"
+            >
+              ссылке
+            </Link>
+          </h3>
         </div>
       )}
     </>
