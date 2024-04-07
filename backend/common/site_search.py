@@ -40,14 +40,14 @@ class SiteSearchViewSet(viewsets.GenericViewSet):
         search_query = request.query_params.get("search")
 
         if search_query:
-            sections = list(Section.objects.filter(name__iregex=search_query).values())
-            materials = list(Material.objects.filter(title__iregex=search_query).values())
-            lessons = list(Lesson.objects.filter(title__iregex=search_query).values())
+            sections = Section.objects.filter(name__iregex=search_query)
+            materials = Material.objects.filter(title__iregex=search_query)
+            lessons = Lesson.objects.filter(title__iregex=search_query)
 
             data = {
-                "sections": sections,
-                "materials": materials,
-                "lessons": lessons,
+                "sections": SectionSerializer(sections, many=True, context={"request": self.request}).data,
+                "materials": MaterialListSerializer(materials, many=True, context={"request": self.request}).data,
+                "lessons": LessonListSerializer(lessons, many=True, context={"request": self.request}).data,
             }
 
             return Response(data)
