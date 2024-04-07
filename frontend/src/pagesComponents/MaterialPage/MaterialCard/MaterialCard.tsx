@@ -12,7 +12,7 @@ import { usePathname } from 'next/navigation';
 import React, { FC } from 'react';
 
 interface IMaterialCardProps {
-  card: MaterialModel | null;
+  card: Omit<MaterialModel, 'text'> | null;
 }
 export const MaterialCard: FC<IMaterialCardProps> = ({ card }) => {
   const pathname = usePathname();
@@ -27,9 +27,9 @@ export const MaterialCard: FC<IMaterialCardProps> = ({ card }) => {
 
   return (
     <Link href={`/materials/${card.id}`}>
-      <Card className="hover:scale-[101%] transition-all active:scale-[101%] h-[350px] sm:max-w-[250px] max-sm:w-full">
+      <Card className="hover:scale-[101%] transition-all active:scale-[101%] h-[350px] sm:max-w-[500px] max-sm:w-full">
         <CardHeader className="flex-col gap-4 overflow-hidden">
-          <div className="flex justify-between max-sm:gap-2 max-sm:items-center">
+          <div className="flex justify-between gap-2 max-sm:items-center w-full">
             <h2
               dangerouslySetInnerHTML={{ __html: separateTitle ?? '' }}
               className="text-xl text-start font-bold"
@@ -39,10 +39,13 @@ export const MaterialCard: FC<IMaterialCardProps> = ({ card }) => {
               className="text-small text-foreground whitespace-nowrap"
             />
           </div>
+          <div
+            dangerouslySetInnerHTML={{ __html: card?.short_description ?? '' }}
+          />
         </CardHeader>
         <CardBody className="overflow-hidden">
           <Image
-            src={''}
+            src={card.image_display ?? ''}
             alt={card.title}
             sizes={'100vw'}
             width={0}

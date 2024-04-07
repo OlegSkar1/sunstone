@@ -1,6 +1,8 @@
 declare interface MaterialModel {
   id: number;
   title: string;
+  short_description: string;
+  image_display: string | null;
   author: number;
   section: number;
   created_at: string;
@@ -12,5 +14,5 @@ declare interface MaterialsModel {
   count: number;
   next: string;
   previous: string;
-  results: MaterialModel[];
+  results: Omit<MaterialModel, 'text'>[];
 }

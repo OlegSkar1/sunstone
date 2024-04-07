@@ -2,7 +2,6 @@
 import { useSectionsQuery } from '@/utils/hooks/tanstack/useSections';
 import React from 'react';
 import { SectionCard } from './SectionCard/SectionCard';
-import Link from 'next/link';
 import { skeletons } from '@/utils/consts/skeleton.const';
 
 export default function Sections() {

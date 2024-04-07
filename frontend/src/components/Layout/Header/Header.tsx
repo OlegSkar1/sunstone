@@ -68,7 +68,7 @@ export const Header = () => {
             exit: { opacity: 0, height: 0, overflow: 'hidden' },
           }}
         >
-          <NavbarMenuToggle className="ml-auto mr-0 h-max pb-10" />
+          <NavbarMenuToggle className="ml-auto mr-0 h-max mb-10 p-6" />
           {navbarItems.map((item) => (
             <NavbarMenuItem
               key={item.link}

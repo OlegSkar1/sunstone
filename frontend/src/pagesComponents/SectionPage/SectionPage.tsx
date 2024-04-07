@@ -13,7 +13,7 @@ export default function Section() {
   });
 
   return (
-    <div className="flex gap-4 flex-wrap pt-10 sm:max-w-[782px] mx-auto max-sm:justify-center">
+    <div className="grid sm:grid-cols-2 gap-6 pt-10 sm:max-w-[1024px] w-full mx-auto">
       {materials
         ? materials.data.results.map((card) => (
             <MaterialCard key={card.id} card={card} />

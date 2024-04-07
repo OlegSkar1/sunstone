@@ -8,9 +8,32 @@ import { useSearchQuery } from '@/utils/hooks/tanstack/useSearch';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 
-export const SearchList = () => {
+const SearchList = () => {
   const query = searchStore((state) => state.search);
   const { data } = useSearchQuery({ search: query }, { enabled: !!query });
+
+  if (!data) return;
+
+  if (
+    !data?.data.lessons.length &&
+    !data?.data.materials.length &&
+    !data?.data.sections.length &&
+    query
+  )
+    return (
+      <AnimatePresence mode="wait">
+        <motion.h2
+          variants={variantsWithHeight}
+          initial="hide"
+          animate="show"
+          exit="hide"
+          className="text-3xl font-bold mb-8 pt-40 text-warning text-center"
+        >
+          Ничего не найдено
+        </motion.h2>
+      </AnimatePresence>
+    );
+
   return (
     <div className="flex flex-col gap-20">
       <AnimatePresence mode="wait">
@@ -19,12 +42,13 @@ export const SearchList = () => {
           initial="hide"
           animate="show"
           exit="hide"
-          className=" pt-10"
         >
           {data && data.data.sections.length > 0 && (
             <>
-              <h2 className="text-3xl font-bold mb-8">Найденные разделы</h2>
-              <div className="">
+              <h2 className="text-3xl font-bold mb-8 pt-10">
+                Найденные разделы
+              </h2>
+              <div className="flex gap-4 flex-wrap sm:max-w-[782px] max-sm:justify-center">
                 {data?.data.sections.map((section) => (
                   <SectionCard key={section.slug} card={section} />
                 ))}
@@ -50,7 +74,7 @@ export const SearchList = () => {
             >
               Найденные материалы
             </motion.h2>
-            <div className="">
+            <div className="grid sm:grid-cols-2 gap-6 sm:max-w-[1024px] w-full">
               {data?.data.materials.map((material) => (
                 <MaterialCard key={material.id} card={material} />
               ))}
@@ -75,7 +99,7 @@ export const SearchList = () => {
             >
               Найденные лекции
             </motion.h2>
-            <div className="">
+            <div>
               {data?.data.lessons.map((lesson) => (
                 <LessonCard key={lesson.id} card={lesson} />
               ))}
@@ -86,3 +110,5 @@ export const SearchList = () => {
     </div>
   );
 };
+
+export default SearchList;

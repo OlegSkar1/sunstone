@@ -22,7 +22,7 @@ export const ProfileDropdown = () => {
     <Dropdown placement="bottom" offset={20}>
       <DropdownTrigger>
         <Avatar
-          src={data.data.avatar_display}
+          src={data.data.avatar_display ?? ''}
           isBordered
           color="primary"
           as="button"
