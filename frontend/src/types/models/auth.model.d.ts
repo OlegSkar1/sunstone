@@ -6,6 +6,10 @@ declare interface SignInModel {
   detail?: string;
 }
 
+declare interface SignUpModel {
+  email: string;
+}
+
 declare interface RefreshTokenModel {
   access: string;
   expires_at: string;

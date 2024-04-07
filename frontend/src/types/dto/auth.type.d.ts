@@ -3,6 +3,11 @@ declare interface SignInDto {
   password: string;
 }
 
+declare interface SignUpDto {
+  email: string;
+  password: string;
+}
+
 declare interface RefreshTokenDto {
   refresh: string;
 }

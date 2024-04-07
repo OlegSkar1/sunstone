@@ -12,10 +12,12 @@ declare module 'next-auth' {
   interface Session {
     user: {
       access_token: string;
+      refresh_token;
       name: string;
       email?: string;
       image: string;
-      expires_at: string;
+      access_expires_at: string;
+      refresh_expires_at: string;
     };
     error?: 'RefreshAccessTokenError';
   }

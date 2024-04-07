@@ -8,6 +8,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { regExpHelper } from '@/utils/helpers/regExp.helper';
 import { defaultRules } from '@/utils/consts/validation.const';
 import { AuthButton } from '@/components/UI/AuthButton/AuthButton';
+import { useSignupMutation } from '@/utils/hooks/tanstack/useSignup';
+import { useRouter } from 'next/navigation';
+import { variantsWithHeight } from '@/utils/consts/animations.const';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface IFormType {
   email: string;
@@ -52,16 +56,27 @@ export const SignupCard = () => {
     },
   });
 
+  const router = useRouter();
+
   const password = watch('password');
 
   const isSamePassword = password === watch('confirmPassword');
 
-  const handleSignup = (data: IFormType) => {
+  const { mutate } = useSignupMutation({
+    onSuccess: () => {
+      router.push('/');
+    },
+    onError: (error: any) => {
+      setError('root', { message: error.email[0] });
+    },
+  });
+
+  const handleSignup = async (data: IFormType) => {
     if (!isSamePassword) {
       setError('confirmPassword', {
         message: 'Пароли не совпадают',
       });
-    } else console.log(data);
+    } else mutate({ email: data.email, password: data.password });
   };
 
   return (
@@ -152,6 +167,19 @@ export const SignupCard = () => {
       >
         Создать аккаунт
       </Button>
+      {errors.root && (
+        <AnimatePresence mode="wait">
+          <motion.span
+            variants={variantsWithHeight}
+            initial="hide"
+            animate="show"
+            exit="hide"
+            className="text-warning -mt-7 mb-4 text-small"
+          >
+            {errors.root.message} || Пользователь уже существует
+          </motion.span>
+        </AnimatePresence>
+      )}
       <Divider text="или" classNameWrapper="pb-10" />
       <div className="flex sm:flex-row flex-col justify-between gap-4 w-full">
         <AuthButton
