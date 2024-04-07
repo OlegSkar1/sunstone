@@ -12,8 +12,10 @@ class SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Section
         fields = (
+            "slug",
             "name",
             "description",
             "image_display",
             "image_preview",
         )
+        lookup_field = "slug"

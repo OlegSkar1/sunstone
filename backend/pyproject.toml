@@ -27,6 +27,9 @@ django-user-agents = "^0.4.0"
 pymemcache = "^4.0.0"
 django-ckeditor-5 = "^0.2.12"
 django-cors-headers = "^4.3.1"
+celery = "^5.3.6"
+redis = "^5.0.3"
+django-nested-admin = "^4.0.2"
 
 
 [tool.poetry.group.test.dependencies]
