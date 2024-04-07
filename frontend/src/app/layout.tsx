@@ -19,7 +19,7 @@ export default async function RootLayout({
 
   return (
     <html lang="ru">
-      <body className="container mx-auto bg-background p-10 min-h-screen font-montserrat font-normal text-base">
+      <body className="container relative mx-auto bg-background p-10 min-h-screen font-montserrat font-normal text-base">
         <Providers session={session}>{children}</Providers>
       </body>
     </html>

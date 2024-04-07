@@ -5,7 +5,7 @@ import { AxiosResponse } from 'axios';
 export const signup = 'signup';
 
 export const useSignupMutation = (
-  options?: MutationOptions<AxiosResponse<SignUpModel>, SignUpDto>
+  options?: MutationOptions<SignUpModel, SignUpDto>
 ) =>
   useMutation({
     mutationKey: [signup],

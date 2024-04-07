@@ -9,9 +9,11 @@ import { regExpHelper } from '@/utils/helpers/regExp.helper';
 import { defaultRules } from '@/utils/consts/validation.const';
 import { AuthButton } from '@/components/UI/AuthButton/AuthButton';
 import { useSignupMutation } from '@/utils/hooks/tanstack/useSignup';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { variantsWithHeight } from '@/utils/consts/animations.const';
 import { AnimatePresence, motion } from 'framer-motion';
+import { signIn } from 'next-auth/react';
+import { useEffect } from 'react';
 
 interface IFormType {
   email: string;
@@ -46,6 +48,7 @@ export const SignupCard = () => {
     formState: { errors, isValid },
     watch,
     setError,
+    getValues,
   } = useForm<IFormType>({
     mode: 'onChange',
     delayError: 1000,
@@ -62,14 +65,23 @@ export const SignupCard = () => {
 
   const isSamePassword = password === watch('confirmPassword');
 
-  const { mutate } = useSignupMutation({
-    onSuccess: () => {
+  const { mutate, data } = useSignupMutation();
+
+  useEffect(() => {
+    const handleLogin = async () => {
+      await signIn('CredentialsSignIn', {
+        email: getValues('email'),
+        password: getValues('password'),
+        redirect: false,
+      });
       router.push('/');
-    },
-    onError: (error: any) => {
-      setError('root', { message: error.email[0] });
-    },
-  });
+    };
+    if (Array.isArray(data?.email)) {
+      setError('root', {
+        message: 'Пользователь с таким email уже существует',
+      });
+    } else if (data?.email) handleLogin();
+  }, [data?.email]);
 
   const handleSignup = async (data: IFormType) => {
     if (!isSamePassword) {
@@ -176,11 +188,11 @@ export const SignupCard = () => {
             exit="hide"
             className="text-warning -mt-7 mb-4 text-small"
           >
-            {errors.root.message} || Пользователь уже существует
+            {errors.root.message}
           </motion.span>
         </AnimatePresence>
       )}
-      <Divider text="или" classNameWrapper="pb-10" />
+      {/* <Divider text="или" classNameWrapper="pb-10" />
       <div className="flex sm:flex-row flex-col justify-between gap-4 w-full">
         <AuthButton
           src="https://authjs.dev/img/providers/google.svg"
@@ -196,7 +208,7 @@ export const SignupCard = () => {
           width={24}
           height={24}
         />
-      </div>
+      </div> */}
     </form>
   );
 };
