@@ -1,6 +1,7 @@
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.template.defaulttags import url
+from django.urls import path, include, re_path
 from django.conf import settings
 
 from .routers import router
@@ -9,6 +10,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/users/", include("users.urls", namespace="users")),
     path("api/", include(router.urls)),
+    path(r"nested_admin/", include("nested_admin.urls")),
 ]
 
 if settings.DEBUG:

@@ -17,3 +17,4 @@ class SectionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SectionSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = SectionPagination
+    lookup_field = "slug"
