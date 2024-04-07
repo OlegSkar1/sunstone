@@ -4,7 +4,6 @@ declare interface MaterialModel {
   short_description: string;
   image_display: string | null;
   author: number;
-  section: number;
   section_slug: string;
   created_at: string;
   updated_at: string;

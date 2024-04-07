@@ -9,14 +9,14 @@ interface ISectionCardProps {
 export const SectionCard: FC<ISectionCardProps> = ({ card }) => {
   if (!card) return;
   return (
-    <Link href={`sections/${card?.slug}`}>
+    <Link href={`sections/${card.slug}`}>
       <Card className="hover:scale-[101%] transition-all active:scale-[101%] h-[350px] sm:max-w-[250px] max-sm:w-full">
         <CardHeader className="flex-col gap-4">
           <h2
-            dangerouslySetInnerHTML={{ __html: card?.name ?? '' }}
+            dangerouslySetInnerHTML={{ __html: card.name ?? '' }}
             className="text-xl text-start font-bold"
           />
-          <div dangerouslySetInnerHTML={{ __html: card?.description ?? '' }} />
+          <div dangerouslySetInnerHTML={{ __html: card.description ?? '' }} />
         </CardHeader>
         <CardBody className="overflow-hidden">
           <Image

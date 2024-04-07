@@ -5,8 +5,17 @@ import { MaterialCard } from './MaterialCard/MaterialCard';
 import { skeletons } from '@/utils/consts/skeleton.const';
 import { searchStore } from '@/store/searchStore';
 import SearchList from '@/components/SearchList/SearchList';
+import { MaterialInfo } from './MaterialInfo/MaterialInfo';
 
-export default function Material() {
+interface IMaterialProps {
+  section_slug: string;
+  materials_id: string;
+}
+
+export default function Material({
+  section_slug,
+  materials_id,
+}: IMaterialProps) {
   const { data } = useMaterialsQuery();
   const query = searchStore((state) => state.search);
   return (
@@ -15,11 +24,7 @@ export default function Material() {
         <SearchList />
       ) : (
         <div>
-          {data
-            ? data?.data.results.map((card) => (
-                <MaterialCard key={card.id} card={card} />
-              ))
-            : skeletons}
+          <MaterialInfo />
         </div>
       )}
     </>
