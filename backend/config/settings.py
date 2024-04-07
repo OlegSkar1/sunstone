@@ -54,11 +54,13 @@ INSTALLED_APPS = [
     "imagekit",
     "django_ckeditor_5",
     "corsheaders",
+    "nested_admin",
     # ThisApp
     "users.apps.UsersConfig",
     "sections.apps.SectionsConfig",
     "materials.apps.MaterialsConfig",
     "lessons.apps.LessonsConfig",
+    "testings.apps.TestingsConfig",
 ]
 
 MIDDLEWARE = [
@@ -275,3 +277,7 @@ CKEDITOR_5_CONFIGS = {
         }
     }
 }
+
+# CELERY
+CELERY_BROKER_URL = env("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND")

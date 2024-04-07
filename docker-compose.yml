@@ -26,6 +26,24 @@ services:
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - POSTGRES_NAME=$POSTGRES_NAME
 
+  celery:
+    command: celery -A config worker -l info -c 1 -Q celery
+    build:
+      context: ./backend
+    env_file:
+      - .env
+    environment:
+      - CELERY_BROKER_URL=$CELERY_BROKER_URL
+      - CELERY_RESULT_BACKEND=$CELERY_RESULT_BACKEND
+    depends_on:
+      - db
+      - redis
+
+  redis:
+    image: redis:6.2-alpine
+    volumes:
+      - redisdata:/data
+
   memcached:
     image: memcached:alpine
     ports:
@@ -34,3 +52,4 @@ services:
 
 volumes:
   postgres_data:
+  redisdata:
