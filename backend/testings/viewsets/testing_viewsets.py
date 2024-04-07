@@ -1,5 +1,5 @@
 from django.db.models import Prefetch
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -9,7 +9,8 @@ from sections.pagination import SectionPagination
 
 from testings.models import Testing, Question, UserTestStatistics
 from testings.serializers import QuestionSerializer
-from testings.serializers.testing_serializers import TestingListSerializer, TestingDetailSerializer
+from testings.serializers.testing_serializers import TestingListSerializer, TestingDetailSerializer, \
+    InputAnswerSerializer, AnswerCheckSerializer
 from testings.utils import provide_answer, write_statistic_for_question
 
 
@@ -82,6 +83,8 @@ class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
 
         return queryset
 
+    @extend_schema(request=InputAnswerSerializer,
+                   responses={status.HTTP_200_OK: OpenApiResponse(response=AnswerCheckSerializer)})
     @action(detail=True, methods=["POST"])
     def check_answer(self, request, pk=None):
         """Првоерка ответа на вопрос в тесте"""
