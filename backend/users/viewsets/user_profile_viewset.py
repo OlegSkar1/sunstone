@@ -50,7 +50,10 @@ class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
         """Профиль текущего авторизованного пользователя"""
 
         queryset = self.get_queryset().first()
-        serializer = self.get_serializer(queryset, many=False)
+        serializer = self.get_serializer(
+            queryset,
+            many=False,
+        )
         return Response(serializer.data)
 
     def get_serializer_class(self):
