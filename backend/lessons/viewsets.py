@@ -4,8 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 
 from sections.pagination import SectionPagination
 
-from lessons.models import Lesson
-from lessons.serializers import LessonDetailSerializer, LessonListSerializer
+from .models import Lesson
+from .serializers import LessonDetailSerializer, LessonListSerializer
+from .filters import LessonFilter
 
 
 @extend_schema(tags=["Lessons"])
@@ -13,6 +14,7 @@ class LessonViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated]
     pagination_class = SectionPagination
+    filterset_class = LessonFilter
 
     def get_queryset(self):
         queryset = self.queryset
