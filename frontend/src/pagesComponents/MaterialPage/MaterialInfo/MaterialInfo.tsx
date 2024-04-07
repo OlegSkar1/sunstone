@@ -15,7 +15,7 @@ export const MaterialInfo: FC<IMaterialInfoProps> = ({
 }) => {
   return (
     <div className="p-10 flex flex-col gap-10">
-      <div className="flex gap-5 justify-around">
+      <div className="flex gap-5 justify-around items-center">
         <h1
           dangerouslySetInnerHTML={{ __html: material?.title ?? '' }}
           className="text-3xl font-bold text-center"

@@ -4,12 +4,12 @@ import Link from 'next/link';
 import React, { FC } from 'react';
 
 interface ISectionCardProps {
-  card: LessonModel | null;
+  card: Omit<LessonModel, 'text'> | null;
 }
 export const LessonCard: FC<ISectionCardProps> = ({ card }) => {
   if (!card) return;
   return (
-    <Link href={`sections/${card?.id}`}>
+    <Link href={`lessons/${card?.id}`}>
       <Card className="hover:scale-[101%] transition-all h-[350px] sm:w-[250px] max-w-[250px] w-full">
         <CardHeader className="flex-col gap-4">
           <h2
