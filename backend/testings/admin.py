@@ -28,6 +28,7 @@ class TestingAdmin(NestedModelAdmin):
 class QuestionStatisticInline(NestedStackedInline):
     model = UserQuestionTestStatistics
     can_delete = False
+    extra = 0
 
     def has_change_permission(self, request, obj=None):
         return False
