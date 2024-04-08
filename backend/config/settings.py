@@ -174,7 +174,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
 STATICFILES_DIRS = [
-    BASE_DIR / 'staticfiles',
+    BASE_DIR / 'common' / 'staticfiles',
 ]
 
 MEDIA_URL = "media/"
@@ -191,7 +191,8 @@ SIMPLE_JWT = {
 }
 
 # CKEditor
-CKEDITOR_5_CUSTOM_CSS = 'css/ckeditor5/admin_dark_mode_fix.css'
+CKEDITOR_5_CUSTOM_CSS = "css/ckeditor5/admin_dark_mode_fix.css"
+CKEDITOR_5_FILE_STORAGE = "common.storage.CKEditorStorage"
 customColorPalette = [
     {
         'color': 'hsl(4, 90%, 58%)',
