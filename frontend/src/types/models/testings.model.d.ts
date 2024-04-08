@@ -1,4 +1,4 @@
-interface TestingsModel {
+declare interface TestingsModel {
   count: number;
   next: null | string;
   previous: null | string;
@@ -18,7 +18,7 @@ declare interface AnswerModel {
   question: number;
 }
 
-interface QuestionType {
+declare interface QuestionType {
   id: number;
   answers: AnswerModel[];
   type: 'single_choices' | 'multiple_choices' | 'input';
@@ -26,11 +26,15 @@ interface QuestionType {
   testing: number;
 }
 
-interface TestModel {
+declare interface TestModel {
   id: number;
   title: string;
   description: string;
   lesson: number;
   questions: QuestionType[];
   users_statistics: number[];
+}
+
+declare interface CheckAnswerModel {
+  ok: boolean;
 }

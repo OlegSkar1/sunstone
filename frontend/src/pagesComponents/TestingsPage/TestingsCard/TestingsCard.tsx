@@ -10,7 +10,7 @@ interface ITestingCardProps {
 export const TestingsCard: FC<ITestingCardProps> = ({ test }) => {
   if (!test) return null;
   return (
-    <Link href={`/tests/${test.id}`}>
+    <Link href={`testings/${test.id}`}>
       <Card className="hover:scale-[101%] transition-all active:scale-[101%] h-[350px] sm:max-w-[250px] max-sm:w-full">
         <CardHeader className="flex-col gap-4">
           <h2
