@@ -25,13 +25,6 @@ SUNSTONE - приложение для самообучения пользова
     # CELERY
     CELERY_BROKER_URL=redis://redis:6379/0
     CELERY_RESULT_BACKEND=redis://redis:6379/0
-    
-## Создать файл ```.env.local``` в директории ```/frontend```
-
-    # Auth config
-    NEXTAUTH_SECRET='https://generate-secret.vercel.app/32'
-    NEXTAUTH_URL=http://localhost:3000
-    NEXT_PUBLIC_BASE_URL=http://localhost
 
 ## Запуск бэкенда
 Выполнить в корне проекта:
