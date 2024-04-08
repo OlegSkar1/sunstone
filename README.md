@@ -34,10 +34,18 @@ SUNSTONE - приложение для самообучения пользова
     NEXTAUTH_URL=http://localhost:3000
     NEXT_PUBLIC_BASE_URL=http://localhost
 
-## Запуск
+## Запуск бэкенда
 Выполнить в корне проекта:
 ```shell
 docker-compose -f docker-compose.prod.yml up -d --build
+```
+
+## Запуск фронтэнда
+Выполнить в директории ```/frontend```
+```shell
+npm i
+npm run build
+npm run start
 ```
 
 ## Использование
