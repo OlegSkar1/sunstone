@@ -56,16 +56,31 @@ export const authOptions: NextAuthOptions = {
         email: { label: 'email', type: 'email', required: true },
         password: { label: 'Password', type: 'password', required: true },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         if (!credentials?.email || !credentials.password) {
           return null;
         }
 
-        const res = await authService.signIn(credentials);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/token/`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: req?.body?.email,
+              password: req?.body?.password,
+            }),
+          }
+        );
 
-        if (res.access) return res;
+        const user = await res.json();
 
-        return null;
+        if (user.access) return user;
+        else {
+          throw new Error(`${user.error}`) || null;
+        }
       },
     }),
     CredentialsProvider({

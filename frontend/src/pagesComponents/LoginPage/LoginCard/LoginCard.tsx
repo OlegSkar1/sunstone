@@ -60,6 +60,7 @@ export const LoginCard = () => {
   });
 
   const handleLogin = async (data: IFormType) => {
+    console.log(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/token/`);
     setIsLoading(true);
     const res = await signIn('CredentialsSignIn', {
       email: data.email,
@@ -67,8 +68,10 @@ export const LoginCard = () => {
 
       redirect: false,
     });
+    console.log(res);
     if (res && !res.error) {
-      router.push(callbackUrl);
+      console.log(callbackUrl);
+      router.push('/');
     } else {
       setError('root', { message: 'Пользователь не существует' });
     }

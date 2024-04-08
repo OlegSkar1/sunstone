@@ -24,8 +24,7 @@ export const useRefreshToken = () => {
       const prevRequest = error?.config;
       if (error?.response?.status === 401 && !prevRequest?.sent) {
         prevRequest.sent = true;
-        await signOut();
-        return api(prevRequest);
+        await signOut({ callbackUrl: '/signin', redirect: false });
       }
       return Promise.reject(error);
     }
