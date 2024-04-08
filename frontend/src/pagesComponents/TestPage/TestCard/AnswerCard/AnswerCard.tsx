@@ -1,6 +1,7 @@
 'use client';
 import React, { FC } from 'react';
 import { SingleAnswer } from './SingleAnswer';
+import { MultipleAnswer } from './MultipleAnswer';
 
 interface IAswerCardProps {
   type: QuestionType['type'];
@@ -17,7 +18,7 @@ export const AnswerCard: FC<IAswerCardProps> = ({
     case 'single_choices':
       return <SingleAnswer answers={answers} question_id={question_id} />;
     case 'multiple_choices':
-      return <div>AswerCard</div>;
+      return <MultipleAnswer answers={answers} question_id={question_id} />;
     case 'input':
       return <div>AswerCard</div>;
   }

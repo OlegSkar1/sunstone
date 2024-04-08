@@ -6,5 +6,5 @@ declare interface TestingsListDto {
 
 declare interface CheckAnswerDto {
   id: string;
-  answer: string;
+  answer: string | string[];
 }
