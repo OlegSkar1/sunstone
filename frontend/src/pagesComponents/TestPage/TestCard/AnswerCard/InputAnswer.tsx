@@ -2,51 +2,48 @@
 import { usePaginationTestStore } from '@/store/paginationTestStore';
 import { defaultRules } from '@/utils/consts/validation.const';
 import { useCheckAnswerMutation } from '@/utils/hooks/tanstack/useTestings';
-import { Button } from '@nextui-org/button';
-import { Checkbox, CheckboxGroup } from '@nextui-org/react';
+import { Button, Input } from '@nextui-org/react';
 import Link from 'next/link';
 import React, { FC, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-interface IMultipleAnswersProps {
-  answers: AnswerModel[];
+interface IInputAnswersProps {
   question_id: number;
+  answers: AnswerModel[];
 }
 
-export const MultipleAnswer: FC<IMultipleAnswersProps> = ({
-  answers,
+export const InputAnswer: FC<IInputAnswersProps> = ({
   question_id,
+  answers,
 }) => {
   const [result, setResult] = useState(true);
-  const [isChecked, setIsChecked] = useState(false);
   const totalPages = usePaginationTestStore((state) => state.totalPages);
 
   const {
     control,
     handleSubmit,
     formState: { isValid },
-  } = useForm<{ answer: string[] }>({
+  } = useForm<{ answer: string }>({
     mode: 'onChange',
     defaultValues: {
-      answer: [],
+      answer: '',
     },
   });
 
   const { mutate, isPending } = useCheckAnswerMutation({
     onSuccess: (data) => {
       setResult(data.data.ok);
-      setIsChecked(true);
     },
   });
 
-  const answerHandler: SubmitHandler<{ answer: string[] }> = (data) => {
+  const answerHandler: SubmitHandler<{ answer: string }> = (data) => {
     mutate({ answer: data.answer, id: question_id.toString() });
   };
 
   return (
     <form
       onSubmit={handleSubmit(answerHandler)}
-      className="flex flex-col items-center gap-10"
+      className="flex flex-col items-center gap-10 flex-1"
     >
       <Controller
         control={control}
@@ -54,21 +51,14 @@ export const MultipleAnswer: FC<IMultipleAnswersProps> = ({
         rules={defaultRules}
         render={({ field }) => {
           return (
-            <CheckboxGroup
+            <Input
               value={field.value}
-              onValueChange={field.onChange}
-              isDisabled={isChecked}
-            >
-              {answers.map((answer) => (
-                <Checkbox
-                  key={answer.id}
-                  value={answer.text}
-                  color={result ? 'primary' : 'danger'}
-                >
-                  {answer.text}
-                </Checkbox>
-              ))}
-            </CheckboxGroup>
+              onChange={field.onChange}
+              placeholder="Ваш ответ"
+              color={result ? 'primary' : 'danger'}
+              errorMessage={!result && 'Неправильно'}
+              variant="bordered"
+            />
           );
         }}
       />

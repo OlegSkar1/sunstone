@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import { SingleAnswer } from './SingleAnswer';
 import { MultipleAnswer } from './MultipleAnswer';
+import { InputAnswer } from './InputAnswer';
 
 interface IAswerCardProps {
   type: QuestionType['type'];
@@ -20,6 +21,6 @@ export const AnswerCard: FC<IAswerCardProps> = ({
     case 'multiple_choices':
       return <MultipleAnswer answers={answers} question_id={question_id} />;
     case 'input':
-      return <div>AswerCard</div>;
+      return <InputAnswer answers={answers} question_id={question_id} />;
   }
 };

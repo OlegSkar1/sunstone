@@ -5,8 +5,10 @@ import { TestCard } from './TestCard/TestCard';
 import { useSlugTestingsQuery } from '@/utils/hooks/tanstack/useTestings';
 import { Pagination } from '@nextui-org/react';
 import { usePaginationTestStore } from '@/store/paginationTestStore';
+import { useEffect } from 'react';
 
 export default function Test({ id }: { id: string }) {
+  const setTotalPages = usePaginationTestStore((state) => state.setTotalPages);
   const currentPage = usePaginationTestStore((state) => state.currentPage);
   const setCurrentPage = usePaginationTestStore(
     (state) => state.setCurrentPage
@@ -14,6 +16,12 @@ export default function Test({ id }: { id: string }) {
 
   const query = searchStore((state) => state.search);
   const { data: testings } = useSlugTestingsQuery(id);
+  useEffect(() => {
+    if (testings) {
+      setTotalPages(testings.data.questions.length);
+    }
+  }, [testings]);
+  console.log(testings?.data.questions.length);
   if (!testings) return;
   return (
     <>

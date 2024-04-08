@@ -1,21 +1,24 @@
 'use client';
+import { usePaginationTestStore } from '@/store/paginationTestStore';
 import { defaultRules } from '@/utils/consts/validation.const';
 import { useCheckAnswerMutation } from '@/utils/hooks/tanstack/useTestings';
 import { Button, Radio, RadioGroup } from '@nextui-org/react';
+import Link from 'next/link';
 import React, { FC, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-interface ISingleInswersProps {
+interface ISingleAnswersProps {
   answers: AnswerModel[];
   question_id: number;
 }
 
-export const SingleAnswer: FC<ISingleInswersProps> = ({
+export const SingleAnswer: FC<ISingleAnswersProps> = ({
   answers,
   question_id,
 }) => {
   const [result, setResult] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
+  const totalPages = usePaginationTestStore((state) => state.totalPages);
 
   const {
     control,
@@ -36,9 +39,11 @@ export const SingleAnswer: FC<ISingleInswersProps> = ({
   });
 
   const answerHandler: SubmitHandler<{ answer: string }> = (data) => {
-    console.log(data);
     mutate({ answer: data.answer, id: question_id.toString() });
   };
+
+  console.log(question_id);
+  console.log(totalPages);
 
   return (
     <form
@@ -70,16 +75,25 @@ export const SingleAnswer: FC<ISingleInswersProps> = ({
         }}
       />
 
-      <Button
-        variant="shadow"
-        color="success"
-        className="text-white"
-        type="submit"
-        isDisabled={!isValid || isChecked}
-        isLoading={isPending}
-      >
-        Подтвердить
-      </Button>
+      <div className={'flex gap-5 mt-auto mb-4'}>
+        <Button
+          variant="shadow"
+          color="success"
+          className="text-white"
+          type="submit"
+          isDisabled={!isValid}
+          isLoading={isPending}
+        >
+          Подтвердить
+        </Button>
+        {question_id === totalPages && (
+          <Link href="../testings">
+            <Button variant="shadow" color="primary" className="text-white">
+              Завершить
+            </Button>
+          </Link>
+        )}
+      </div>
     </form>
   );
 };

@@ -14,7 +14,11 @@ export const TestCard: FC<ITestCardProps> = ({ test }) => {
         <h2 className="text-xl font-bold text-center w-full">{test?.text}</h2>
       </CardHeader>
       <CardBody>
-        <AnswerCard answers={test.answers} type={test.type} question_id={test.id} />
+        <AnswerCard
+          answers={test.answers}
+          type={test.type}
+          question_id={test.id}
+        />
       </CardBody>
     </Card>
   );
