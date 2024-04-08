@@ -6,11 +6,12 @@ declare interface LessonModel {
   author_email: string;
   material_id: number;
   material_title: string;
+  text: string;
 }
 
 declare interface LessonsListModel {
   count: number;
   next?: string;
   previous?: string;
-  results: LessonModel[];
+  results: Omit<LessonModel, 'text'>[];
 }

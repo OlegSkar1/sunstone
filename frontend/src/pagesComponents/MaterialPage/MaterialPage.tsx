@@ -1,11 +1,10 @@
 'use client';
-import { useMaterialsQuery } from '@/utils/hooks/tanstack/useMaterials';
+import { useSlugMaterialsQuery } from '@/utils/hooks/tanstack/useMaterials';
 import React from 'react';
-import { MaterialCard } from './MaterialCard/MaterialCard';
-import { skeletons } from '@/utils/consts/skeleton.const';
 import { searchStore } from '@/store/searchStore';
 import SearchList from '@/components/SearchList/SearchList';
 import { MaterialInfo } from './MaterialInfo/MaterialInfo';
+import Link from 'next/link';
 
 interface IMaterialProps {
   section_slug: string;
@@ -16,9 +15,7 @@ export default function Material({
   section_slug,
   materials_id,
 }: IMaterialProps) {
-  const { data: material } = useMaterialsQuery({
-    section_filter: section_slug,
-  });
+  const { data: material } = useSlugMaterialsQuery(materials_id);
   const query = searchStore((state) => state.search);
   return (
     <>
@@ -27,10 +24,19 @@ export default function Material({
       ) : (
         <div>
           <MaterialInfo
-            material={material?.data.results}
+            material={material?.data}
             section_slug={section_slug}
             materials_id={materials_id}
           />
+          <h3 className="text-xl text-center font-semibold">
+            Ознакомиться с лекциями по теме можно по{' '}
+            <Link
+              href={`${materials_id}/lessons`}
+              className="text-secondary hover:underline"
+            >
+              ссылке
+            </Link>
+          </h3>
         </div>
       )}
     </>
