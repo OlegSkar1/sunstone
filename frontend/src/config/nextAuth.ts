@@ -78,9 +78,7 @@ export const authOptions: NextAuthOptions = {
         const user = await res.json();
 
         if (user.access) return user;
-        else {
-          throw new Error(`${user.error}`) || null;
-        }
+        return null
       },
     }),
     CredentialsProvider({
