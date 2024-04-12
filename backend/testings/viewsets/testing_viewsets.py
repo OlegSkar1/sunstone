@@ -17,6 +17,7 @@ from ..serializers import (
 )
 from ..utils import provide_answer, write_statistic_for_question
 from ..filters import TestingFilter
+from ..constants import TestModes
 
 
 @extend_schema(tags=["Testings"])
@@ -101,6 +102,7 @@ class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
         """Првоерка ответа на вопрос в тесте"""
 
         user_answer = request.data.get("answer")
+        test_mode = request.data.get("test_mode")
         question = self.get_object()
 
         response_map = {
@@ -113,13 +115,15 @@ class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
             "status_code": status.HTTP_200_OK,
         }
 
-        write_statistic_for_question(
-            user=request.user,
-            question=question,
-            user_answer=user_answer,
-        )
+        if test_mode == TestModes.EXAM:
+            write_statistic_for_question(
+                user=request.user,
+                question=question,
+                user_answer=user_answer,
+            )
 
         return Response(
-            response_map[provide_answer(user_answer, question)],
+            response_map[provide_answer(user_answer, question)]
+            if test_mode == TestModes.TRAINING else {},
             status=response_map["status_code"]
         )

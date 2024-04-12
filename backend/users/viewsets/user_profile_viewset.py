@@ -8,6 +8,7 @@ from materials.models import Material
 from users.models import UserProfile
 from users.serializers import UserProfileListSerializer, UserProfileDetailSerializer
 from sections.pagination import SectionPagination
+from testings.models import UserTestStatistics
 
 
 class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
@@ -28,6 +29,10 @@ class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
                         Prefetch(
                             "user__materials",
                             queryset=Material.objects.filter(author=self.kwargs["pk"])
+                        ),
+                        Prefetch(
+                            "user__user_statistics",
+                            queryset=UserTestStatistics.objects.filter(user=self.request.user)
                         )
                     )
                 )
@@ -39,13 +44,17 @@ class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
                         Prefetch(
                             "user__materials",
                             queryset=Material.objects.filter(author=self.request.user)
+                        ),
+                        Prefetch(
+                            "user__user_statistics",
+                            queryset=UserTestStatistics.objects.filter(user=self.request.user)
                         )
                     )
                 )
 
         return queryset
 
-    @action(detail=False, methods=["GET"])
+    @action(detail=False, methods=["GET", "PUT", "PATCH"])
     def myprofile(self, request, *args, **kwargs):
         """Профиль текущего авторизованного пользователя"""
 
