@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
 from testings.models import Testing, Question, Answer
+from ..constants import TestModes
 
 
 class InputAnswerSerializer(serializers.Serializer):
     answer = serializers.CharField(required=True)
+    test_mode = serializers.ChoiceField(choices=TestModes.choices, required=True)
 
 
 class AnswerCheckSerializer(serializers.Serializer):
