@@ -25,8 +25,8 @@ class UserProfileListSerializer(serializers.ModelSerializer):
 class UserProfileDetailSerializer(UserProfileListSerializer):
     """Сериализатор детального профиля пользователя"""
 
-    user_materials = serializers.SerializerMethodField(read_only=True)
-    user_test_statistics = serializers.SerializerMethodField(read_only=True)
+    user_materials = serializers.SerializerMethodField(read_only=True, allow_null=True)
+    user_test_statistics = serializers.SerializerMethodField(read_only=True, allow_null=True)
     user_email = serializers.ReadOnlyField(source="user.email", read_only=True)
     avatar = serializers.ImageField(write_only=True)
     avatar_display = MultiImageField(required=False, read_only=True)
@@ -61,3 +61,17 @@ class UserProfileDetailSerializer(UserProfileListSerializer):
             context={"request": self.context.get("request")}
         )
         return serializer.data
+
+    def update(self, instance: UserProfile, validated_data):
+
+        instance.avatar = validated_data.get("avatar", instance.avatar)
+        instance.name = validated_data.get("name", instance.name)
+        instance.last_name = validated_data.get("last_name", instance.last_name)
+
+        instance.save(
+            update_fields=[
+                field_name for field_name, field_value in validated_data.items()
+                if (field_name not in ("user", "user_id") and field_value)
+            ]
+        )
+        return instance

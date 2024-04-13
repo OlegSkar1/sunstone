@@ -1,5 +1,5 @@
 from django.db.models import Prefetch
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -54,15 +54,26 @@ class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
 
         return queryset
 
-    @action(detail=False, methods=["GET", "PUT", "PATCH"])
+    @action(detail=False, methods=["GET", "PATCH"])
     def myprofile(self, request, *args, **kwargs):
         """Профиль текущего авторизованного пользователя"""
 
         queryset = self.get_queryset().first()
-        serializer = self.get_serializer(
-            queryset,
-            many=False,
-        )
+
+        if request.method == "PATCH":
+            serializer = self.get_serializer(
+                instance=queryset,
+                data=request.data,
+                partial=True
+            )
+
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+        elif request.method == "GET":
+            serializer = self.get_serializer(
+                queryset,
+                many=False,
+            )
         return Response(serializer.data)
 
     def get_serializer_class(self):
