@@ -1,5 +1,5 @@
 'use client';
-import { usePaginationTestStore } from '@/store/paginationTestStore';
+import { useTestStore } from '@/store/testStore';
 import { defaultRules } from '@/utils/consts/validation.const';
 import { useCheckAnswerMutation } from '@/utils/hooks/tanstack/useTestings';
 import { Button, Input } from '@nextui-org/react';
@@ -10,14 +10,17 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 interface IInputAnswersProps {
   question_id: number;
   answers: AnswerModel[];
+  isCompleted: boolean;
 }
 
 export const InputAnswer: FC<IInputAnswersProps> = ({
   question_id,
   answers,
+  isCompleted,
 }) => {
-  const [result, setResult] = useState(true);
-  const totalPages = usePaginationTestStore((state) => state.totalPages);
+  const totalPages = useTestStore((state) => state.totalPages);
+  const setCompletedList = useTestStore((state) => state.setCompletedList);
+  const testMode = useTestStore((state) => state.testMode);
 
   const {
     control,
@@ -30,14 +33,16 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
     },
   });
 
-  const { mutate, isPending } = useCheckAnswerMutation({
-    onSuccess: (data) => {
-      setResult(data.data.ok);
-    },
-  });
+  const { mutate, isPending, data } = useCheckAnswerMutation({});
 
   const answerHandler: SubmitHandler<{ answer: string }> = (data) => {
-    mutate({ answer: data.answer, id: question_id.toString() });
+    mutate({
+      answer: data.answer,
+      id: question_id.toString(),
+      test_mode: testMode,
+    });
+
+    if (testMode === 'exam') setCompletedList(question_id);
   };
 
   return (
@@ -45,6 +50,7 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
       onSubmit={handleSubmit(answerHandler)}
       className="flex flex-col items-center gap-10 flex-1"
     >
+      <p>{answers[0].text}</p>
       <Controller
         control={control}
         name="answer"
@@ -55,8 +61,8 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
               value={field.value}
               onChange={field.onChange}
               placeholder="Ваш ответ"
-              color={result ? 'primary' : 'danger'}
-              errorMessage={!result && 'Неправильно'}
+              color={data?.data.ok ? 'primary' : 'danger'}
+              errorMessage={!data?.data.ok && 'Неправильно'}
               variant="bordered"
             />
           );
@@ -69,7 +75,7 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
           color="success"
           className="text-white"
           type="submit"
-          isDisabled={!isValid}
+          isDisabled={!isValid || isCompleted}
           isLoading={isPending}
         >
           Подтвердить

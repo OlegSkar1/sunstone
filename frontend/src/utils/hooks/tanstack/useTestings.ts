@@ -30,6 +30,11 @@ export const useCheckAnswerMutation = (
 ) =>
   useMutation({
     mutationKey: [checkAnswer],
-    mutationFn: ({ answer, id }) => testingsService.checkAnswer({ id, answer }),
+    mutationFn: ({ answer, id, test_mode }) =>
+      testingsService.checkAnswer({
+        id,
+        answer,
+        test_mode,
+      }),
     ...options,
   });

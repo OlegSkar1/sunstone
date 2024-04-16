@@ -1,8 +1,10 @@
 'use client';
-import { usePaginationTestStore } from '@/store/paginationTestStore';
+
+import { CustomRadio } from '@/components/UI/CustomRadio';
+import { useTestStore } from '@/store/testStore';
 import { defaultRules } from '@/utils/consts/validation.const';
 import { useCheckAnswerMutation } from '@/utils/hooks/tanstack/useTestings';
-import { Button, Radio, RadioGroup } from '@nextui-org/react';
+import { Button, RadioGroup } from '@nextui-org/react';
 import Link from 'next/link';
 import React, { FC, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -10,15 +12,18 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 interface ISingleAnswersProps {
   answers: AnswerModel[];
   question_id: number;
+  isCompleted: boolean;
 }
 
 export const SingleAnswer: FC<ISingleAnswersProps> = ({
   answers,
   question_id,
+  isCompleted,
 }) => {
-  const [result, setResult] = useState(true);
-  const [isChecked, setIsChecked] = useState(false);
-  const totalPages = usePaginationTestStore((state) => state.totalPages);
+  const totalPages = useTestStore((state) => state.totalPages);
+
+  const setCompletedList = useTestStore((state) => state.setCompletedList);
+  const testMode = useTestStore((state) => state.testMode);
 
   const {
     control,
@@ -31,15 +36,16 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
     },
   });
 
-  const { mutate, isPending } = useCheckAnswerMutation({
-    onSuccess: (data) => {
-      setResult(data.data.ok);
-      setIsChecked(true);
-    },
-  });
+  const { mutate, isPending, data } = useCheckAnswerMutation({});
 
   const answerHandler: SubmitHandler<{ answer: string }> = (data) => {
-    mutate({ answer: data.answer, id: question_id.toString() });
+    mutate({
+      answer: data.answer,
+      id: question_id.toString(),
+      test_mode: testMode,
+    });
+
+    if (testMode === 'exam') setCompletedList(question_id);
   };
 
   console.log(question_id);
@@ -59,16 +65,17 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
             <RadioGroup
               value={field.value}
               onValueChange={field.onChange}
-              isDisabled={isChecked}
+              isDisabled={isCompleted}
+              isInvalid={!data?.data.ok}
             >
               {answers.map((answer) => (
-                <Radio
+                <CustomRadio
                   key={answer.id}
                   value={answer.text}
-                  color={result ? 'primary' : 'danger'}
+                  color={data?.data.ok ? 'primary' : 'danger'}
                 >
                   {answer.text}
-                </Radio>
+                </CustomRadio>
               ))}
             </RadioGroup>
           );
@@ -81,7 +88,7 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
           color="success"
           className="text-white"
           type="submit"
-          isDisabled={!isValid}
+          isDisabled={!isValid || isCompleted}
           isLoading={isPending}
         >
           Подтвердить
