@@ -14,12 +14,12 @@ export const LessonInfo: FC<ILessonInfoProps> = ({ lesson }) => {
         className="text-3xl font-bold text-center"
       />
       <h2
-        dangerouslySetInnerHTML={{ __html: lesson?.material_title ?? '' }}
+        dangerouslySetInnerHTML={{ __html: lesson?.title ?? '' }}
         className="text-xl font-semibold text-center"
       />
-      {lesson?.preview_thumbnail && (
+      {lesson?.preview_display && (
         <Image
-          src={lesson.preview_thumbnail}
+          src={lesson.preview_display}
           alt={lesson?.title ?? ''}
           className="max-w-full max-h-[300px] object-cover rounded-lg"
           width={0}
@@ -29,8 +29,18 @@ export const LessonInfo: FC<ILessonInfoProps> = ({ lesson }) => {
       )}
       <p
         dangerouslySetInnerHTML={{ __html: lesson?.text ?? '' }}
-        className="[&_*]:!text-black"
+        className="[&_*]:!text-black pb-4"
       />
+      <iframe
+        width="560"
+        height="315"
+        src={lesson?.youtube_link}
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="same-origin"
+        allowFullScreen
+        className="self-center mb-4 rounded-xl"
+      ></iframe>
       <h3 className="text-xl font-semibold text-center">
         Пройти тесты по теме можно перейдя по{' '}
         <Link

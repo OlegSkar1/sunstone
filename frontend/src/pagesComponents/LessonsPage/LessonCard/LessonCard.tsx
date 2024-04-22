@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { FC } from 'react';
 
 interface ISectionCardProps {
-  card: Omit<LessonModel, 'text'> | null;
+  card: LessonListItem | null;
 }
 export const LessonCard: FC<ISectionCardProps> = ({ card }) => {
   if (!card) return;
