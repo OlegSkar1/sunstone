@@ -33,15 +33,15 @@ export const TestInfo = ({
           ? 'Одна попытка, результат будет сохранен'
           : 'Кол-во попыток неограничено, реультат не будет сохранен'}
       </p>
-      <Button
-        variant="solid"
-        color="primary"
-        className="text-white w-fit shrink-0"
-      >
-        <Link href={`testings/${id}`} onClick={clickHandler}>
+      <Link href={`testings/${id}`} onClick={clickHandler}>
+        <Button
+          variant="solid"
+          color="primary"
+          className="text-white w-fit shrink-0"
+        >
           Начать
-        </Link>
-      </Button>
+        </Button>
+      </Link>
     </div>
   );
 };

@@ -7,9 +7,10 @@ export const testingsService = {
   async getSlugTestings(id: string) {
     return api.get<TestModel>(`/api/testings/${id}/`);
   },
-  async checkAnswer({ id, answer }: CheckAnswerDto) {
+  async checkAnswer({ id, answer, test_mode }: CheckAnswerDto) {
     return api.post<CheckAnswerModel>(`/api/questions/${id}/check_answer/`, {
       answer,
+      test_mode,
     });
   },
 };

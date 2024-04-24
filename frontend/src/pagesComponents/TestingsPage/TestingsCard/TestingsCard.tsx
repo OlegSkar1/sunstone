@@ -1,6 +1,7 @@
 'use client';
 import { TestInfo } from '@/pagesComponents/TestPage/TestInfo/TestInfo';
 import { useModalStore } from '@/store/modalStore';
+import { useTestStore } from '@/store/testStore';
 import { Card, CardBody, CardHeader } from '@nextui-org/react';
 import React, { FC } from 'react';
 
@@ -11,9 +12,10 @@ interface ITestingCardProps {
 export const TestingsCard: FC<ITestingCardProps> = ({ test }) => {
   const showModal = useModalStore((state) => state.showModal);
   const hideModal = useModalStore((state) => state.hideModal);
+  const clearTest = useTestStore((state) => state.clear);
 
   const cardHandler = () => {
-    console.log('test');
+    clearTest();
     showModal(<TestInfo id={test.id} clickHandler={hideModal} />, test.title);
   };
 

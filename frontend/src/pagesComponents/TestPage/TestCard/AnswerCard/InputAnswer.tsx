@@ -21,6 +21,7 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
   const totalPages = useTestStore((state) => state.totalPages);
   const setCompletedList = useTestStore((state) => state.setCompletedList);
   const testMode = useTestStore((state) => state.testMode);
+  const clearTest = useTestStore((state) => state.clear);
 
   const {
     control,
@@ -38,7 +39,7 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
   const answerHandler: SubmitHandler<{ answer: string }> = (data) => {
     mutate({
       answer: data.answer,
-      id: question_id.toString(),
+      id: question_id,
       test_mode: testMode,
     });
 
@@ -50,7 +51,6 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
       onSubmit={handleSubmit(answerHandler)}
       className="flex flex-col items-center gap-10 flex-1"
     >
-      <p>{answers[0].text}</p>
       <Controller
         control={control}
         name="answer"
@@ -58,6 +58,7 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
         render={({ field }) => {
           return (
             <Input
+              disabled={isCompleted}
               value={field.value}
               onChange={field.onChange}
               placeholder="Ваш ответ"
@@ -82,7 +83,12 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
         </Button>
         {question_id === totalPages && (
           <Link href="../testings">
-            <Button variant="shadow" color="primary" className="text-white">
+            <Button
+              variant="shadow"
+              color="primary"
+              className="text-white"
+              onClick={clearTest}
+            >
               Завершить
             </Button>
           </Link>

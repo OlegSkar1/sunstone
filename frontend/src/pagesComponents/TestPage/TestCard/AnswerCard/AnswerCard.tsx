@@ -17,10 +17,12 @@ export const AnswerCard: FC<IAswerCardProps> = ({
   question_id,
 }) => {
   const completedList = useTestStore((state) => state.completedList);
+
   const testMode = useTestStore((state) => state.testMode);
 
   const isCompleted = useMemo(() => {
-    if (testMode === 'exam') return completedList.includes(question_id);
+    if (testMode === 'exam')
+      return !!completedList.find((item) => item.questionId === question_id);
     return false;
   }, [completedList, question_id, testMode]);
 

@@ -25,6 +25,13 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
 
   const setCompletedList = useTestStore((state) => state.setCompletedList);
   const testMode = useTestStore((state) => state.testMode);
+  const completedList = useTestStore((state) => state.completedList);
+  const clearTest = useTestStore((state) => state.clear);
+
+  const currentQuestion = completedList.find(
+    (item) => item.questionId === question_id
+  );
+  const [answerId, setAnswerId] = useState(currentQuestion?.answerId || 0);
 
   const {
     control,
@@ -35,19 +42,23 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
     defaultValues: {
       answer: '',
     },
+    values: {
+      answer: answers.find((answer) => answer.id === answerId)?.text || '',
+    },
   });
 
-  const { mutate, isPending, data } = useCheckAnswerMutation({});
+  const { mutate, data } = useCheckAnswerMutation();
 
   const answerHandler: SubmitHandler<{ answer: string }> = (data) => {
     console.log(testMode);
     mutate({
       answer: data.answer,
-      id: question_id.toString(),
+      id: question_id,
       test_mode: testMode,
     });
 
-    if (testMode === 'exam') setCompletedList(question_id);
+    if (testMode === 'exam')
+      setCompletedList({ answerId, questionId: question_id });
   };
 
   return (
@@ -60,10 +71,15 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
         name="answer"
         rules={defaultRules}
         render={({ field }) => {
+          const onChangeHandler = (value: string) => {
+            const answer = answers.find((answer) => answer.text === value);
+            setAnswerId(answer?.id || 0);
+            field.onChange(value);
+          };
           return (
             <RadioGroup
               value={field.value}
-              onValueChange={field.onChange}
+              onValueChange={onChangeHandler}
               isDisabled={isCompleted}
             >
               {answers.map((answer) => (
@@ -99,13 +115,17 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
           className="text-white"
           type="submit"
           isDisabled={!isValid || isCompleted}
-          isLoading={isPending}
         >
           Подтвердить
         </Button>
         {question_id === totalPages && (
           <Link href="../testings">
-            <Button variant="shadow" color="primary" className="text-white">
+            <Button
+              variant="shadow"
+              color="primary"
+              className="text-white"
+              onClick={clearTest}
+            >
               Завершить
             </Button>
           </Link>

@@ -5,7 +5,7 @@ declare interface TestingsListDto {
 }
 
 declare interface CheckAnswerDto {
-  id: string;
+  id: number;
   answer: string | string[];
   test_mode: 'exam' | 'training';
 }
