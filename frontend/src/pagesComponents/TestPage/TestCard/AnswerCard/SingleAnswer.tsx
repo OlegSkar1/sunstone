@@ -6,7 +6,7 @@ import { defaultRules } from '@/utils/consts/validation.const';
 import { useCheckAnswerMutation } from '@/utils/hooks/tanstack/useTestings';
 import { Button, RadioGroup } from '@nextui-org/react';
 import Link from 'next/link';
-import React, { FC, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 interface ISingleAnswersProps {
@@ -20,6 +20,7 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
   question_id,
   isCompleted,
 }) => {
+  const radioRef = useRef<HTMLElement>(null);
   const totalPages = useTestStore((state) => state.totalPages);
 
   const setCompletedList = useTestStore((state) => state.setCompletedList);
@@ -39,6 +40,7 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
   const { mutate, isPending, data } = useCheckAnswerMutation({});
 
   const answerHandler: SubmitHandler<{ answer: string }> = (data) => {
+    console.log(testMode);
     mutate({
       answer: data.answer,
       id: question_id.toString(),
@@ -47,9 +49,6 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
 
     if (testMode === 'exam') setCompletedList(question_id);
   };
-
-  console.log(question_id);
-  console.log(totalPages);
 
   return (
     <form
@@ -66,13 +65,24 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
               value={field.value}
               onValueChange={field.onChange}
               isDisabled={isCompleted}
-              isInvalid={!data?.data.ok}
             >
               {answers.map((answer) => (
                 <CustomRadio
+                  ref={radioRef}
+                  data-invalid={
+                    data && radioRef.current?.dataset.selected === 'true'
+                      ? !data.data.ok
+                      : false
+                  }
                   key={answer.id}
                   value={answer.text}
-                  color={data?.data.ok ? 'primary' : 'danger'}
+                  color={
+                    data && radioRef.current?.dataset.selected === 'true'
+                      ? data.data.ok
+                        ? 'success'
+                        : 'danger'
+                      : 'primary'
+                  }
                 >
                   {answer.text}
                 </CustomRadio>

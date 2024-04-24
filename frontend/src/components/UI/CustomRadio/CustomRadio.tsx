@@ -14,7 +14,7 @@ export const CustomRadio: FC<ICustomRadioProps> = ({ children, ...props }) => {
         base: clsx(
           'inline-flex m-0 bg-content1 hover:bg-content2 items-center justify-between transition-all',
           'flex-row-reverse max-w-[300px] cursor-pointer rounded-lg gap-4 p-4 border-2 border-transparent',
-          'data-[selected=true]:border-primary group-data-[invalid=true]:border-danger'
+          'data-[selected=true]:border-primary data-[invalid=true]:border-danger'
         ),
         control: 'group-data-[invalid=true]:border-danger',
         label: 'group-data-[invalid=true]:text-danger',

@@ -2,7 +2,6 @@
 import { useProfileQuery } from '@/utils/hooks/tanstack/useProfile';
 import {
   Avatar,
-  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
