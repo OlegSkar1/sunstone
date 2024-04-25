@@ -2,9 +2,9 @@
 import { useTestStore } from '@/store/testStore';
 import { defaultRules } from '@/utils/consts/validation.const';
 import { useCheckAnswerMutation } from '@/utils/hooks/tanstack/useTestings';
-import { Button, Input } from '@nextui-org/react';
+import { Button, Input, Textarea } from '@nextui-org/react';
 import Link from 'next/link';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 interface IInputAnswersProps {
@@ -22,19 +22,55 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
   const setCompletedList = useTestStore((state) => state.setCompletedList);
   const testMode = useTestStore((state) => state.testMode);
   const clearTest = useTestStore((state) => state.clear);
+  const completedList = useTestStore((state) => state.completedList);
+
+  const currentQuestion = completedList.find(
+    (item) => item.questionId === question_id
+  );
+
+  const [textAreaColor, setSetTextAreaColor] = useState<
+    'primary' | 'success' | 'danger'
+  >('primary');
 
   const {
     control,
     handleSubmit,
-    formState: { isValid },
+    formState: { isValid, errors },
+    getValues,
+    setError,
+    clearErrors,
   } = useForm<{ answer: string }>({
     mode: 'onChange',
     defaultValues: {
       answer: '',
     },
+    values: {
+      answer: (currentQuestion?.answers as string) || '',
+    },
   });
 
-  const { mutate, isPending, data } = useCheckAnswerMutation({});
+  const { mutate, data } = useCheckAnswerMutation({
+    onSuccess: (data) => {
+      if (data.data.ok) {
+        setSetTextAreaColor('success');
+        clearErrors('answer');
+      } else {
+        setSetTextAreaColor('danger');
+      }
+
+      setCompletedList({
+        answers: getValues('answer'),
+        questionId: question_id,
+        color: data.data.ok ? 'success' : 'danger',
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (!data?.data.ok) {
+      setError('answer', { message: 'Неверно', type: 'custom' });
+    }
+  }, [data?.data.ok]);
 
   const answerHandler: SubmitHandler<{ answer: string }> = (data) => {
     mutate({
@@ -42,29 +78,33 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
       id: question_id,
       test_mode: testMode,
     });
-
-    if (testMode === 'exam') setCompletedList(question_id);
   };
 
   return (
     <form
       onSubmit={handleSubmit(answerHandler)}
-      className="flex flex-col items-center gap-10 flex-1"
+      className="flex flex-col items-center gap-10 flex-1 mt-10"
     >
       <Controller
         control={control}
         name="answer"
         rules={defaultRules}
         render={({ field }) => {
+          const onChangeHandler = (value: string) => {
+            setSetTextAreaColor('primary');
+            field.onChange(value);
+          };
           return (
             <Input
+              isInvalid={data && !data?.data.ok}
               disabled={isCompleted}
               value={field.value}
-              onChange={field.onChange}
+              onValueChange={onChangeHandler}
               placeholder="Ваш ответ"
-              color={data?.data.ok ? 'primary' : 'danger'}
-              errorMessage={!data?.data.ok && 'Неправильно'}
-              variant="bordered"
+              color={textAreaColor}
+              errorMessage={errors.answer?.message}
+              variant="faded"
+              className="max-w-[300px]"
             />
           );
         }}
@@ -76,8 +116,7 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
           color="success"
           className="text-white"
           type="submit"
-          isDisabled={!isValid || isCompleted}
-          isLoading={isPending}
+          isDisabled={!isValid || (isCompleted && testMode === 'exam')}
         >
           Подтвердить
         </Button>
