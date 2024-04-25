@@ -31,7 +31,14 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
   const currentQuestion = completedList.find(
     (item) => item.questionId === question_id
   );
+  const currentAnswer = answers.find(
+    (answer) => answer.id === currentQuestion?.answerId
+  );
+
   const [answerId, setAnswerId] = useState(currentQuestion?.answerId || 0);
+  const [radioColor, setRadioColor] = useState<
+    'primary' | 'success' | 'danger'
+  >(currentQuestion?.color || 'primary');
 
   const {
     control,
@@ -43,22 +50,27 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
       answer: '',
     },
     values: {
-      answer: answers.find((answer) => answer.id === answerId)?.text || '',
+      answer: currentAnswer?.text || '',
     },
   });
 
-  const { mutate, data } = useCheckAnswerMutation();
+  const { mutate } = useCheckAnswerMutation({
+    onSuccess: (data) => {
+      data.data.ok ? setRadioColor('success') : setRadioColor('danger');
+      setCompletedList({
+        answerId,
+        questionId: question_id,
+        color: data.data.ok ? 'success' : 'danger',
+      });
+    },
+  });
 
   const answerHandler: SubmitHandler<{ answer: string }> = (data) => {
-    console.log(testMode);
     mutate({
       answer: data.answer,
       id: question_id,
       test_mode: testMode,
     });
-
-    if (testMode === 'exam')
-      setCompletedList({ answerId, questionId: question_id });
   };
 
   return (
@@ -72,6 +84,8 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
         rules={defaultRules}
         render={({ field }) => {
           const onChangeHandler = (value: string) => {
+            setRadioColor('primary');
+
             const answer = answers.find((answer) => answer.text === value);
             setAnswerId(answer?.id || 0);
             field.onChange(value);
@@ -85,20 +99,10 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
               {answers.map((answer) => (
                 <CustomRadio
                   ref={radioRef}
-                  data-invalid={
-                    data && radioRef.current?.dataset.selected === 'true'
-                      ? !data.data.ok
-                      : false
-                  }
+                  isInvalid
                   key={answer.id}
                   value={answer.text}
-                  color={
-                    data && radioRef.current?.dataset.selected === 'true'
-                      ? data.data.ok
-                        ? 'success'
-                        : 'danger'
-                      : 'primary'
-                  }
+                  color={radioColor}
                 >
                   {answer.text}
                 </CustomRadio>
@@ -114,7 +118,7 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
           color="success"
           className="text-white"
           type="submit"
-          isDisabled={!isValid || isCompleted}
+          isDisabled={!isValid || (isCompleted && testMode === 'exam')}
         >
           Подтвердить
         </Button>

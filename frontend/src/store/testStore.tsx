@@ -7,6 +7,7 @@ type TestModeType = 'exam' | 'training';
 interface CompletedItem {
   answerId: number;
   questionId: number;
+  color: 'primary' | 'success' | 'danger';
 }
 
 interface ITestStore {
@@ -15,7 +16,7 @@ interface ITestStore {
   totalPages: number;
   setTotalPages: (page: number) => void;
   completedList: CompletedItem[];
-  setCompletedList: ({ answerId, questionId }: CompletedItem) => void;
+  setCompletedList: ({ answerId, questionId, color }: CompletedItem) => void;
   testMode: TestModeType;
   setTestMode: (testMode: TestModeType) => void;
   clear: () => void;
@@ -44,7 +45,12 @@ export const useTestStore = create<ITestStore>()(
       setCurrentPage: (page) => set({ currentPage: page }),
       setCompletedList: (completedItem) =>
         set((state) => {
-          state.completedList.push(completedItem);
+          const itemIndex = state.completedList.findIndex((item) => {
+            return item.questionId === completedItem.questionId;
+          });
+          itemIndex !== -1
+            ? (state.completedList[itemIndex] = completedItem)
+            : state.completedList.push(completedItem);
         }),
       clear: () => set(initialState),
     })),
