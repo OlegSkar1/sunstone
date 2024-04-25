@@ -31,11 +31,6 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
   const currentQuestion = completedList.find(
     (item) => item.questionId === question_id
   );
-  const currentAnswer = answers.find(
-    (answer) => answer.id === currentQuestion?.answerId
-  );
-
-  const [answerId, setAnswerId] = useState(currentQuestion?.answerId || 0);
   const [radioColor, setRadioColor] = useState<
     'primary' | 'success' | 'danger'
   >(currentQuestion?.color || 'primary');
@@ -44,13 +39,14 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
     control,
     handleSubmit,
     formState: { isValid },
+    getValues,
   } = useForm<{ answer: string }>({
     mode: 'onChange',
     defaultValues: {
       answer: '',
     },
     values: {
-      answer: currentAnswer?.text || '',
+      answer: (currentQuestion?.answers as string) || '',
     },
   });
 
@@ -58,7 +54,7 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
     onSuccess: (data) => {
       data.data.ok ? setRadioColor('success') : setRadioColor('danger');
       setCompletedList({
-        answerId,
+        answers: getValues('answer'),
         questionId: question_id,
         color: data.data.ok ? 'success' : 'danger',
       });
@@ -85,9 +81,6 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
         render={({ field }) => {
           const onChangeHandler = (value: string) => {
             setRadioColor('primary');
-
-            const answer = answers.find((answer) => answer.text === value);
-            setAnswerId(answer?.id || 0);
             field.onChange(value);
           };
           return (

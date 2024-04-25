@@ -5,7 +5,7 @@ import { immer } from 'zustand/middleware/immer';
 type TestModeType = 'exam' | 'training';
 
 interface CompletedItem {
-  answerId: number;
+  answers: string | string[];
   questionId: number;
   color: 'primary' | 'success' | 'danger';
 }
@@ -16,7 +16,7 @@ interface ITestStore {
   totalPages: number;
   setTotalPages: (page: number) => void;
   completedList: CompletedItem[];
-  setCompletedList: ({ answerId, questionId, color }: CompletedItem) => void;
+  setCompletedList: ({ questionId, color, answers }: CompletedItem) => void;
   testMode: TestModeType;
   setTestMode: (testMode: TestModeType) => void;
   clear: () => void;

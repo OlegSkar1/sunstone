@@ -23,19 +23,41 @@ export const MultipleAnswer: FC<IMultipleAnswersProps> = ({
   const setCompletedList = useTestStore((state) => state.setCompletedList);
   const testMode = useTestStore((state) => state.testMode);
   const clearTest = useTestStore((state) => state.clear);
+  const completedList = useTestStore((state) => state.completedList);
+
+  const currentQuestion = completedList.find(
+    (item) => item.questionId === question_id
+  );
+
+  const [checkboxColor, setCheckboxColor] = useState<
+    'primary' | 'success' | 'danger'
+  >(currentQuestion?.color || 'primary');
 
   const {
     control,
     handleSubmit,
     formState: { isValid },
+    getValues,
   } = useForm<{ answer: string[] }>({
     mode: 'onChange',
     defaultValues: {
       answer: [],
     },
+    values: {
+      answer: (currentQuestion?.answers as string[]) || [],
+    },
   });
 
-  const { mutate, isPending, data } = useCheckAnswerMutation({});
+  const { mutate, data } = useCheckAnswerMutation({
+    onSuccess: (data) => {
+      data.data.ok ? setCheckboxColor('success') : setCheckboxColor('danger');
+      setCompletedList({
+        answers: getValues('answer'),
+        questionId: question_id,
+        color: data.data.ok ? 'success' : 'danger',
+      });
+    },
+  });
 
   const answerHandler: SubmitHandler<{ answer: string[] }> = (data) => {
     mutate({
@@ -43,8 +65,6 @@ export const MultipleAnswer: FC<IMultipleAnswersProps> = ({
       id: question_id,
       test_mode: testMode,
     });
-
-    if (testMode === 'exam') setCompletedList(question_id);
   };
 
   return (
@@ -57,22 +77,27 @@ export const MultipleAnswer: FC<IMultipleAnswersProps> = ({
         name="answer"
         rules={defaultRules}
         render={({ field }) => {
+          const onChangeHandler = (value: string[]) => {
+            setCheckboxColor('primary');
+            field.onChange(value);
+          };
           return (
             <CheckboxGroup
               value={field.value}
-              onValueChange={field.onChange}
+              onValueChange={onChangeHandler}
               isDisabled={isCompleted}
-              isInvalid={!data?.data.ok}
             >
-              {answers.map((answer) => (
-                <Checkbox
-                  key={answer.id}
-                  value={answer.text}
-                  color={data?.data.ok ? 'primary' : 'danger'}
-                >
-                  {answer.text}
-                </Checkbox>
-              ))}
+              {answers.map((answer) => {
+                return (
+                  <Checkbox
+                    key={answer.id}
+                    value={answer.text}
+                    color={checkboxColor}
+                  >
+                    {answer.text}
+                  </Checkbox>
+                );
+              })}
             </CheckboxGroup>
           );
         }}
@@ -84,8 +109,7 @@ export const MultipleAnswer: FC<IMultipleAnswersProps> = ({
           color="success"
           className="text-white"
           type="submit"
-          isDisabled={!isValid || isCompleted}
-          isLoading={isPending}
+          isDisabled={!isValid || (isCompleted && testMode === 'exam')}
         >
           Подтвердить
         </Button>
