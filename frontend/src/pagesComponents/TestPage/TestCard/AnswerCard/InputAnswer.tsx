@@ -3,6 +3,7 @@ import { useTestStore } from '@/store/testStore';
 import { defaultRules } from '@/utils/consts/validation.const';
 import { useCheckAnswerMutation } from '@/utils/hooks/tanstack/useTestings';
 import { Button, Input, Textarea } from '@nextui-org/react';
+import clsx from 'clsx';
 import Link from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -67,7 +68,7 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
   });
 
   useEffect(() => {
-    if (!data?.data.ok) {
+    if (data && !data?.data.ok) {
       setError('answer', { message: 'Неверно', type: 'custom' });
     }
   }, [data?.data.ok]);
@@ -102,6 +103,7 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
               onValueChange={onChangeHandler}
               placeholder="Ваш ответ"
               color={textAreaColor}
+              classNames={{ input: `text-${textAreaColor}` }}
               errorMessage={errors.answer?.message}
               variant="faded"
               className="max-w-[300px]"
@@ -121,13 +123,8 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
           Подтвердить
         </Button>
         {question_id === totalPages && (
-          <Link href="../testings">
-            <Button
-              variant="shadow"
-              color="primary"
-              className="text-white"
-              onClick={clearTest}
-            >
+          <Link href="../testings" onClick={clearTest}>
+            <Button variant="shadow" color="primary" className="text-white">
               Завершить
             </Button>
           </Link>
