@@ -1,6 +1,8 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 
+from common.models import MultiImageMeta, Spec
 from ..constants import QuestionTypes
 
 
@@ -61,6 +63,49 @@ class Question(models.Model):
         verbose_name_plural = "Вопросы"
 
 
+class Relation(models.Model, metaclass=MultiImageMeta):
+    """Связь для ответа при вопросе на соответствие"""
+
+    IMAGE_WIDTH = 1024
+    IMAGE_HEIGHT = 768
+
+    answer = models.ForeignKey(
+        "testings.Answer",
+        verbose_name="Соответствие",
+        on_delete=models.CASCADE,
+        related_name="relations"
+    )
+    text = models.TextField(
+        verbose_name="Текст",
+        blank=True,
+    )
+    image = models.ImageField(
+        upload_to="answers/images",
+        verbose_name="Изображение",
+        blank=True,
+        null=True,
+    )
+
+    image_map = {
+        "image_display": Spec("image", IMAGE_WIDTH, IMAGE_HEIGHT),
+        "image_preview": Spec("image", IMAGE_WIDTH, IMAGE_HEIGHT, True),
+    }
+
+    def clean(self):
+        if (
+            self.pk is None
+                and (question := getattr(self.answer, "question", None))
+                and question.type != QuestionTypes.RELATION
+        ):
+            raise ValidationError("Соответствие для ответа можно выбрать только"
+                                  "для вопроса с типом %(question_type)s" %
+                                  {"question_type": QuestionTypes.RELATION.name})
+
+    class Meta:
+        verbose_name = "Соответствие"
+        verbose_name_plural = "Соответствие"
+
+
 class Answer(models.Model):
     """Модель варианта овтета на вопрос"""
 
@@ -85,3 +130,4 @@ class Answer(models.Model):
     class Meta:
         verbose_name = "Вариант ответа"
         verbose_name_plural = "Варианты ответа"
+        ordering = ["?"]

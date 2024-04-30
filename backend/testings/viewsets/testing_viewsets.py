@@ -14,10 +14,11 @@ from ..serializers import (
     InputAnswerSerializer,
     AnswerCheckSerializer,
     TestingDetailSerializer,
+    InputRelationAnswerSerializer,
 )
 from ..utils import provide_answer, write_statistic_for_question
 from ..filters import TestingFilter
-from ..constants import TestModes
+from ..constants import TestModes, QuestionTypes
 
 
 @extend_schema(tags=["Testings"])
@@ -95,8 +96,14 @@ class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
 
         return queryset
 
-    @extend_schema(request=InputAnswerSerializer,
-                   responses={status.HTTP_200_OK: OpenApiResponse(response=AnswerCheckSerializer)})
+    @extend_schema(
+        request={
+            f"{QuestionTypes.INPUT.value}": InputAnswerSerializer,
+            f"{QuestionTypes.SINGLE_CHOICES.value}": InputAnswerSerializer,
+            f"{QuestionTypes.MULTIPLE_CHOICES.value}": InputAnswerSerializer,
+            f"{QuestionTypes.RELATION.value}": InputRelationAnswerSerializer,
+        },
+        responses={status.HTTP_200_OK: OpenApiResponse(response=AnswerCheckSerializer)})
     @action(detail=True, methods=["POST"])
     def check_answer(self, request, pk=None):
         """Првоерка ответа на вопрос в тесте"""

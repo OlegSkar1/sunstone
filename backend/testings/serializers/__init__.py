@@ -5,6 +5,7 @@ from .testing_serializers import (
     TestingDetailSerializer,
     InputAnswerSerializer,
     AnswerCheckSerializer,
+    InputRelationAnswerSerializer,
 )
 from .testing_statistics_serializers import (
     TestingUserStatisticsListSerializer,
