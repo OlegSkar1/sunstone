@@ -2,13 +2,29 @@ from django.contrib import admin
 
 from nested_admin.nested import NestedStackedInline, NestedModelAdmin
 
-from testings.models import Question, Answer, Testing, UserQuestionTestStatistics, UserTestStatistics
+from testings.models import (
+    Question,
+    Answer,
+    Relation,
+    Testing,
+    UserQuestionTestStatistics,
+    UserTestStatistics
+)
+
+
+class RelationInline(NestedStackedInline):
+    model = Relation
+    classes = ("collapse",)
+    extra = 0
+    max_num = 1
+    fk_name = "answer"
 
 
 class AnswersInline(NestedStackedInline):
     model = Answer
     classes = ('collapse',)
     extra = 1
+    inlines = (RelationInline,)
 
 
 class QuestionsInline(NestedStackedInline):

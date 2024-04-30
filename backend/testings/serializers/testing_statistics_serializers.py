@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from testings.models import UserTestStatistics, UserQuestionTestStatistics, Answer
@@ -26,6 +27,7 @@ class UserQuestionTestStatisticsSerializer(serializers.ModelSerializer):
             "correct_answers",
         )
 
+    @extend_schema_field(AnswerSerializer)
     def get_correct_answers(self, obj):
         return AnswerSerializer(
             obj.question.answers.filter(is_correct=True),
