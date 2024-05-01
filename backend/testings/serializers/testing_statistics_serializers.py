@@ -1,3 +1,6 @@
+import json
+import ast
+
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
@@ -72,7 +75,13 @@ class TestingUserStatisticsDetailSerializer(TestingUserStatisticsListSerializer)
         questions_counter = obj.testing.questions.count()
         true_answers_counter = 0
         for question_statistic in obj.userquestionteststatistics_set.all().distinct("user_variant"):
-            if provide_answer(question_statistic.user_variant, question_statistic.question):
+            # Так как возможно получение списка в виде строки
+            # нужно привести вариант пользователя к python типу
+            user_variant: str | list[dict] = ast.literal_eval(
+                question_statistic.user_variant
+            )
+
+            if provide_answer(user_variant, question_statistic.question):
                 true_answers_counter += 1
 
         return (true_answers_counter / questions_counter) * 100
