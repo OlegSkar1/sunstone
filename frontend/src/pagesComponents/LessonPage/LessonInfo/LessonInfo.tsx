@@ -1,7 +1,8 @@
+'use client';
+import { BackButton } from '@/components/UI/BackButton';
 import { useTestingsQuery } from '@/utils/hooks/tanstack/useTestings';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import React, { FC } from 'react';
 
 interface ILessonInfoProps {
@@ -14,6 +15,7 @@ export const LessonInfo: FC<ILessonInfoProps> = ({ lesson }) => {
   });
   return (
     <div className="pt-10 flex flex-col gap-5">
+      <BackButton href="./" className="self-start" />
       <h1
         dangerouslySetInnerHTML={{ __html: lesson?.title ?? '' }}
         className="text-3xl font-bold text-center"
@@ -46,7 +48,7 @@ export const LessonInfo: FC<ILessonInfoProps> = ({ lesson }) => {
         allowFullScreen
         className="self-center mb-4 rounded-xl"
       ></iframe>
-      {testings?.data.results.length !== 0 && (
+      {testings && testings?.data.results.length !== 0 && (
         <h3 className="text-xl font-semibold text-center">
           Пройти тесты по теме можно перейдя по{' '}
           <Link

@@ -9,8 +9,11 @@ interface ISectionCardProps {
 export const SectionCard: FC<ISectionCardProps> = ({ card }) => {
   if (!card) return;
   return (
-    <Link href={`sections/${card.slug}`}>
-      <Card className="hover:scale-[101%] transition-all active:scale-[101%] h-[350px] sm:max-w-[250px] max-sm:w-full">
+    <Link
+      href={`sections/${card.slug}`}
+      className="hover:scale-[101%] transition-all active:scale-[101%] h-[350px] sm:max-w-[250px] w-full flex"
+    >
+      <Card className="w-full">
         <CardHeader className="flex-col gap-4">
           <h2
             dangerouslySetInnerHTML={{ __html: card.name ?? '' }}
@@ -18,14 +21,14 @@ export const SectionCard: FC<ISectionCardProps> = ({ card }) => {
           />
           <div dangerouslySetInnerHTML={{ __html: card.description ?? '' }} />
         </CardHeader>
-        <CardBody className="overflow-hidden">
+        <CardBody className="overflow-hidden h-full">
           <Image
             src={card.image_display ?? ''}
             alt={card.name}
-            sizes={'100vw'}
-            width={0}
-            height={0}
-            className="w-full max-h-[150px] object-cover rounded-lg"
+            sizes="100vw"
+            style={{ objectFit: 'cover' }}
+            fill
+            className="rounded-lg"
           />
         </CardBody>
       </Card>

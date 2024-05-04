@@ -14,16 +14,11 @@ export const MaterialInfo: FC<IMaterialInfoProps> = ({
   material,
 }) => {
   return (
-    <div className="p-10 flex flex-col gap-10">
-      <div className="flex gap-5 justify-around items-center">
-        <h1
-          dangerouslySetInnerHTML={{ __html: material?.title ?? '' }}
-          className="text-3xl font-bold text-center"
-        />
-        <span className="justify-self-end text-small font-semibold">
-          {dayjs(material?.created_at).format('DD.MM.YYYY')}
-        </span>
-      </div>
+    <div className="p-10 pt-0 flex flex-col gap-10">
+      <h1
+        dangerouslySetInnerHTML={{ __html: material?.title ?? '' }}
+        className="text-3xl font-bold text-center"
+      />
       <Image
         src={material?.image_display ?? ''}
         alt={material?.title ?? ''}
@@ -32,6 +27,9 @@ export const MaterialInfo: FC<IMaterialInfoProps> = ({
         height={0}
         className="w-full max-h-[300px] object-cover rounded-lg"
       />
+      <span className="self-end text-small font-semibold -mt-8">
+        {dayjs(material?.created_at).format('DD.MM.YYYY')}
+      </span>
       <div
         dangerouslySetInnerHTML={{ __html: material?.text ?? '' }}
         className="!text-base  [&_span]:!text-black"

@@ -25,8 +25,11 @@ export const MaterialCard: FC<IMaterialCardProps> = ({ card }) => {
   if (!card) return;
 
   return (
-    <Link href={`/sections/${card.section_slug}/materials/${card.id}`}>
-      <Card className="hover:scale-[101%] transition-all active:scale-[101%] h-[350px] sm:max-w-[500px] max-sm:w-full">
+    <Link
+      href={`/sections/${card.section_slug}/materials/${card.id}`}
+      className="hover:scale-[101%] transition-all active:scale-[101%] h-[350px] sm:max-w-[500px] flex w-full"
+    >
+      <Card className="w-full">
         <CardHeader className="flex-col gap-4 overflow-hidden">
           <div className="flex justify-between gap-2 max-sm:items-center w-full">
             <h2
@@ -43,14 +46,18 @@ export const MaterialCard: FC<IMaterialCardProps> = ({ card }) => {
           />
         </CardHeader>
         <CardBody className="overflow-hidden">
-          <Image
-            src={card.image_display ?? ''}
-            alt={card.title}
-            sizes={'100vw'}
-            width={0}
-            height={0}
-            className="w-full max-h-[150px] object-fill rounded-lg"
-          />
+          {card.image_display && (
+            <div className="relative h-full">
+              <Image
+                src={card.image_display}
+                alt={card.title}
+                sizes="100vw"
+                style={{ objectFit: 'cover' }}
+                fill
+                className="rounded-lg"
+              />
+            </div>
+          )}
         </CardBody>
         <CardFooter>
           <p className="font-semibold">{card.section_slug}</p>

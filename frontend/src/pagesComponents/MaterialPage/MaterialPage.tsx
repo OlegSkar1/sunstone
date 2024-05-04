@@ -5,6 +5,7 @@ import { searchStore } from '@/store/searchStore';
 import SearchList from '@/components/SearchList/SearchList';
 import { MaterialInfo } from './MaterialInfo/MaterialInfo';
 import Link from 'next/link';
+import { BackButton } from '@/components/UI/BackButton';
 
 interface IMaterialProps {
   section_slug: string;
@@ -22,7 +23,8 @@ export default function Material({
       {query ? (
         <SearchList />
       ) : (
-        <div>
+        <div className="flex flex-col gap-5 pt-10">
+          <BackButton href="../" className="self-start" />
           <MaterialInfo
             material={material?.data}
             section_slug={section_slug}

@@ -30,12 +30,7 @@ export default function Test({ id }: { id: string }) {
         <SearchList />
       ) : (
         <div className="flex flex-col gap-4 items-center mt-20">
-          <BackButton
-            href="../testings"
-            variant="bordered"
-            color="secondary"
-            className="self-start"
-          />
+          <BackButton href="./" className="self-start" />
 
           <TestCard test={testings?.data.questions[currentPage - 1]} />
           <Pagination
