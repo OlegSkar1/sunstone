@@ -1,5 +1,7 @@
+import { useTestingsQuery } from '@/utils/hooks/tanstack/useTestings';
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import React, { FC } from 'react';
 
 interface ILessonInfoProps {
@@ -7,6 +9,9 @@ interface ILessonInfoProps {
 }
 
 export const LessonInfo: FC<ILessonInfoProps> = ({ lesson }) => {
+  const { data: testings } = useTestingsQuery({
+    lesson_id: lesson?.id.toString(),
+  });
   return (
     <div className="pt-10 flex flex-col gap-5">
       <h1
@@ -41,16 +46,17 @@ export const LessonInfo: FC<ILessonInfoProps> = ({ lesson }) => {
         allowFullScreen
         className="self-center mb-4 rounded-xl"
       ></iframe>
-      <h3 className="text-xl font-semibold text-center">
-        Пройти тесты по теме можно перейдя по{' '}
-        <Link
-          href={`${lesson?.id}/testings`}
-          className="text-secondary  hover:underline"
-          target="_blank"
-        >
-          ссылке
-        </Link>
-      </h3>
+      {testings?.data.results.length !== 0 && (
+        <h3 className="text-xl font-semibold text-center">
+          Пройти тесты по теме можно перейдя по{' '}
+          <Link
+            href={`${lesson?.id}/testings`}
+            className="text-secondary  hover:underline"
+          >
+            ссылке
+          </Link>
+        </h3>
+      )}
     </div>
   );
 };
