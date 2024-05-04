@@ -6,9 +6,10 @@ import React from 'react';
 import { LessonCard } from './LessonCard/LessonCard';
 import { skeletons } from '@/utils/consts/skeleton.const';
 
-export default function Lessons() {
+export default function Lessons({ materialId }: { materialId: string }) {
   const query = searchStore((state) => state.search);
-  const { data: lessons } = useLessonsQuery();
+  const { data: lessons } = useLessonsQuery({ material_id: +materialId });
+
   return (
     <>
       {query ? (
