@@ -18,7 +18,8 @@ export const TestCard: FC<ITestCardProps> = ({ test }) => {
         <AnswerCard
           answers={test.answers}
           type={test.type}
-          question_id={test.id}
+          id={test.id}
+          relations={test.relations}
         />
       </CardBody>
     </Card>

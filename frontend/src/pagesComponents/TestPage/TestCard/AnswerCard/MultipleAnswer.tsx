@@ -48,7 +48,7 @@ export const MultipleAnswer: FC<IMultipleAnswersProps> = ({
     },
   });
 
-  const { mutate, data } = useCheckAnswerMutation({
+  const { mutate } = useCheckAnswerMutation({
     onSuccess: (data) => {
       data.data.ok ? setCheckboxColor('success') : setCheckboxColor('danger');
       setCompletedList({

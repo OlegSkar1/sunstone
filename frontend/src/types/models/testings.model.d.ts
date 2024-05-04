@@ -18,10 +18,18 @@ declare interface AnswerModel {
   question: number;
 }
 
+declare interface RelationModel {
+  id: number;
+  image_display: string | null;
+  image_preview: string | null;
+  text: string;
+}
+
 declare interface QuestionType {
   id: number;
   answers: AnswerModel[];
-  type: 'single_choices' | 'multiple_choices' | 'input';
+  relations: RelationModel[];
+  type: 'single_choices' | 'multiple_choices' | 'input' | 'relation';
   text: string;
   testing: number;
 }

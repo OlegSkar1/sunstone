@@ -6,6 +6,6 @@ declare interface TestingsListDto {
 
 declare interface CheckAnswerDto {
   id: number;
-  answer: string | string[];
+  answer: string | string[] | { [key: number]: number }[];
   test_mode: 'exam' | 'training';
 }

@@ -4,17 +4,15 @@ import { SingleAnswer } from './SingleAnswer';
 import { MultipleAnswer } from './MultipleAnswer';
 import { InputAnswer } from './InputAnswer';
 import { useTestStore } from '@/store/testStore';
+import { RelationAnswer } from './RelationAnswer';
 
-interface IAswerCardProps {
-  type: QuestionType['type'];
-  answers: AnswerModel[];
-  question_id: number;
-}
+interface IAswerCardProps extends Omit<QuestionType, 'text' | 'testing'> {}
 
 export const AnswerCard: FC<IAswerCardProps> = ({
   type,
   answers,
-  question_id,
+  id,
+  relations,
 }) => {
   const completedList = useTestStore((state) => state.completedList);
 
@@ -22,16 +20,16 @@ export const AnswerCard: FC<IAswerCardProps> = ({
 
   const isCompleted = useMemo(() => {
     if (testMode === 'exam')
-      return !!completedList.find((item) => item.questionId === question_id);
+      return !!completedList.find((item) => item.questionId === id);
     return false;
-  }, [completedList, question_id, testMode]);
+  }, [completedList, id, testMode]);
 
   switch (type) {
     case 'single_choices':
       return (
         <SingleAnswer
           answers={answers}
-          question_id={question_id}
+          question_id={id}
           isCompleted={isCompleted}
         />
       );
@@ -39,15 +37,18 @@ export const AnswerCard: FC<IAswerCardProps> = ({
       return (
         <MultipleAnswer
           answers={answers}
-          question_id={question_id}
+          question_id={id}
           isCompleted={isCompleted}
         />
       );
     case 'input':
+      return <InputAnswer question_id={id} isCompleted={isCompleted} />;
+    case 'relation':
       return (
-        <InputAnswer
+        <RelationAnswer
           answers={answers}
-          question_id={question_id}
+          relations={relations}
+          id={id}
           isCompleted={isCompleted}
         />
       );

@@ -2,21 +2,18 @@
 import { useTestStore } from '@/store/testStore';
 import { defaultRules } from '@/utils/consts/validation.const';
 import { useCheckAnswerMutation } from '@/utils/hooks/tanstack/useTestings';
-import { Button, Input, Textarea } from '@nextui-org/react';
-import clsx from 'clsx';
+import { Button, Input } from '@nextui-org/react';
 import Link from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 interface IInputAnswersProps {
   question_id: number;
-  answers: AnswerModel[];
   isCompleted: boolean;
 }
 
 export const InputAnswer: FC<IInputAnswersProps> = ({
   question_id,
-  answers,
   isCompleted,
 }) => {
   const totalPages = useTestStore((state) => state.totalPages);

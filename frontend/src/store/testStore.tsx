@@ -5,7 +5,8 @@ import { immer } from 'zustand/middleware/immer';
 type TestModeType = 'exam' | 'training';
 
 interface CompletedItem {
-  answers: string | string[];
+  answers: string | string[] | number[];
+  relations?: number[];
   questionId: number;
   color: 'primary' | 'success' | 'danger';
 }
