@@ -1,3 +1,4 @@
+import { IValue } from '@/components/UI/DragAndDropList/DragAndDropList';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -5,10 +6,11 @@ import { immer } from 'zustand/middleware/immer';
 type TestModeType = 'exam' | 'training';
 
 interface CompletedItem {
-  answers: string | string[] | number[];
-  relations?: number[];
+  answers: string | string[] | IValue[];
+  relations?: IValue[];
   questionId: number;
-  color: 'primary' | 'success' | 'danger';
+  color?: 'primary' | 'success' | 'danger';
+  ok?: boolean;
 }
 
 interface ITestStore {

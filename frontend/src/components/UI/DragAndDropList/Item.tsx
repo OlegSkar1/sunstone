@@ -1,9 +1,10 @@
 'use client';
 import { Card, CardBody } from '@nextui-org/react';
-import { Reorder, useMotionValue } from 'framer-motion';
-import React, { FC, useState } from 'react';
+import { Reorder } from 'framer-motion';
+import React, { FC, useRef, useState } from 'react';
 import { IValue } from './DragAndDropList';
 import clsx from 'clsx';
+import Image from 'next/image';
 
 export const styles = {
   item: 'mobile:p-[6px_14px] p-[6px]  cursor-grab transition-colors',
@@ -16,6 +17,7 @@ interface IItemProps {
 }
 
 export const Item: FC<IItemProps> = ({ value }) => {
+  const imageRef = useRef<HTMLImageElement>(null);
   const [togglePointer, setTogglePointer] = useState(false);
   const pointerToggleHandler = () => {
     setTogglePointer(!togglePointer);
@@ -35,7 +37,21 @@ export const Item: FC<IItemProps> = ({ value }) => {
           [styles.item]: !togglePointer,
         })}
       >
-        <CardBody>{value.text}</CardBody>
+        <CardBody>
+          {<p className="pb-5">{value.text}</p>}
+          {value.image_display && (
+            <Image
+              ref={imageRef}
+              src={value.image_display}
+              alt="Answer Image"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="w-full h-auto object-cover rounded-md"
+              draggable={false}
+            />
+          )}
+        </CardBody>
       </Card>
     </Reorder.Item>
   );

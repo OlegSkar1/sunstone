@@ -1,6 +1,5 @@
-import { Card, CardBody } from '@nextui-org/react';
 import { Reorder } from 'framer-motion';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Item } from './Item';
 
 export interface IValue {

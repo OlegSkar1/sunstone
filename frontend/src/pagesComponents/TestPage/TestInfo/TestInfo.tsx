@@ -3,6 +3,7 @@ import { useTestStore } from '@/store/testStore';
 import { useSlugTestingsQuery } from '@/utils/hooks/tanstack/useTestings';
 import { Button, Switch } from '@nextui-org/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export const TestInfo = ({
   id,
@@ -11,9 +12,15 @@ export const TestInfo = ({
   id: number;
   clickHandler: () => void;
 }) => {
+  const router = useRouter();
   const setTestMode = useTestStore((state) => state.setTestMode);
   const testMode = useTestStore((state) => state.testMode);
   const { data: testings } = useSlugTestingsQuery(id.toString());
+
+  const startSubmitHandler = () => {
+    router.push(`testings/${id}`);
+    clickHandler();
+  };
 
   return (
     <div className="flex flex-col items-center gap-20">
@@ -33,15 +40,15 @@ export const TestInfo = ({
           ? 'Одна попытка, результат будет сохранен'
           : 'Кол-во попыток неограничено, реультат не будет сохранен'}
       </p>
-      <Link href={`testings/${id}`} onClick={clickHandler}>
-        <Button
-          variant="solid"
-          color="primary"
-          className="text-white w-fit shrink-0"
-        >
-          Начать
-        </Button>
-      </Link>
+
+      <Button
+        variant="solid"
+        color="primary"
+        className="text-white w-fit shrink-0"
+        onClick={startSubmitHandler}
+      >
+        Начать
+      </Button>
     </div>
   );
 };

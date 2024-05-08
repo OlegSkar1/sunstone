@@ -1,13 +1,16 @@
 'use client';
 import { DragAndDropList } from '@/components/UI/DragAndDropList';
 import { IValue } from '@/components/UI/DragAndDropList/DragAndDropList';
+import { ValidationError } from '@/components/UI/ValidationError/ValidationError';
 import { useTestStore } from '@/store/testStore';
+import { animateFormError } from '@/utils/consts/animations.const';
 import { useCheckAnswerMutation } from '@/utils/hooks/tanstack/useTestings';
 import { Button } from '@nextui-org/react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { current } from 'immer';
 import Link from 'next/link';
-import React, { FC, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { FC, useEffect, useMemo, useState } from 'react';
+import { Controller, set, useForm } from 'react-hook-form';
 
 interface IFormData {
   answers: IValue[];
@@ -33,52 +36,54 @@ export const RelationAnswer: FC<IRelationAnwerProps> = ({
 
   const currentQuestion = completedList.find((item) => item.questionId === id);
 
-  console.log(currentQuestion);
+  const [error, setError] = useState('');
 
-  const [checkboxColor, setCheckboxColor] = useState<
-    'primary' | 'success' | 'danger'
-  >(currentQuestion?.color || 'primary');
-
-  const { control, handleSubmit, getValues, watch } = useForm<IFormData>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    clearErrors,
+  } = useForm<IFormData>({
     defaultValues: {
       answers,
       relations,
+    },
+    values: {
+      answers: currentQuestion?.answers as IValue[],
+      relations: currentQuestion?.relations as IValue[],
     },
   });
 
   const watchedAnswers = watch('answers');
   const watchedRelations = watch('relations');
 
-  const answersIds = useMemo(
-    () => watchedAnswers.map((item) => item.id).filter((item) => item),
-    [watchedAnswers]
-  );
-
-  const relationsIds = useMemo(
-    () => watchedRelations.map((item) => item.id).filter((item) => item),
-    [watchedRelations]
-  );
-
   const { mutate } = useCheckAnswerMutation({
     onSuccess: (data) => {
-      data.data.ok ? setCheckboxColor('success') : setCheckboxColor('danger');
       setCompletedList({
-        answers: answersIds,
-        relations: relationsIds,
+        answers: watchedAnswers,
+        relations: watchedRelations,
         questionId: id,
-        color: data.data.ok ? 'success' : 'danger',
+        ok: data?.data.ok,
       });
     },
   });
 
+  useEffect(() => {
+    if (currentQuestion) {
+      currentQuestion.ok ? setError('') : setError('Неверный ответ');
+    }
+  }, [currentQuestion]);
+
   const submitHandler = (data: IFormData) => {
     const formattedData = data.answers.reduce((acc, item, index) => {
-      acc[index] = {
-        [item.id]: data.relations[index]['id'],
-      };
+      acc = [
+        ...acc,
+        { answer_id: item.id, relation_id: data.relations[index].id },
+      ];
 
       return acc;
-    }, [] as { [key: number]: number }[]);
+    }, [] as RelationDto[]);
 
     mutate({
       answer: formattedData,
@@ -108,6 +113,35 @@ export const RelationAnswer: FC<IRelationAnwerProps> = ({
           )}
         />
       </div>
+
+      <div className="flex items-center justify-center h-[20px]">
+        <AnimatePresence mode="wait">
+          {currentQuestion && currentQuestion.ok ? (
+            <motion.p
+              variants={animateFormError}
+              initial="hide"
+              animate="show"
+              exit={'hide'}
+              transition={{ duration: 0.15 }}
+              className="text-success"
+            >
+              Верно
+            </motion.p>
+          ) : (
+            <motion.div
+              variants={animateFormError}
+              initial="hide"
+              animate="show"
+              exit={'hide'}
+              transition={{ duration: 0.15 }}
+              className="text-danger"
+            >
+              {error}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
       <div className={'flex gap-5 mt-auto mb-4'}>
         <Button
           variant="shadow"
