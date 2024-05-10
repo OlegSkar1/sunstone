@@ -1,16 +1,15 @@
 'use client';
 import { DragAndDropList } from '@/components/UI/DragAndDropList';
 import { IValue } from '@/components/UI/DragAndDropList/DragAndDropList';
-import { ValidationError } from '@/components/UI/ValidationError/ValidationError';
 import { useTestStore } from '@/store/testStore';
 import { animateFormError } from '@/utils/consts/animations.const';
 import { useCheckAnswerMutation } from '@/utils/hooks/tanstack/useTestings';
 import { Button } from '@nextui-org/react';
+import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
-import { current } from 'immer';
 import Link from 'next/link';
-import React, { FC, useEffect, useMemo, useState } from 'react';
-import { Controller, set, useForm } from 'react-hook-form';
+import React, { FC, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 interface IFormData {
   answers: IValue[];
@@ -38,13 +37,7 @@ export const RelationAnswer: FC<IRelationAnwerProps> = ({
 
   const [error, setError] = useState('');
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    clearErrors,
-  } = useForm<IFormData>({
+  const { control, handleSubmit, watch } = useForm<IFormData>({
     defaultValues: {
       answers,
       relations,
@@ -70,10 +63,10 @@ export const RelationAnswer: FC<IRelationAnwerProps> = ({
   });
 
   useEffect(() => {
-    if (currentQuestion) {
+    if (currentQuestion && testMode === 'training') {
       currentQuestion.ok ? setError('') : setError('Неверный ответ');
     }
-  }, [currentQuestion]);
+  }, [currentQuestion, testMode]);
 
   const submitHandler = (data: IFormData) => {
     const formattedData = data.answers.reduce((acc, item, index) => {
@@ -97,19 +90,32 @@ export const RelationAnswer: FC<IRelationAnwerProps> = ({
       onSubmit={handleSubmit(submitHandler)}
       className="flex flex-col items-center gap-10"
     >
-      <div className="grid grid-cols-[minmax(100px,_1fr)_minmax(100px,_1fr)] auto-rows-fr gap-10 w-full">
+      <div
+        className={clsx(
+          'grid grid-cols-[minmax(100px,_1fr)_minmax(100px,_1fr)] auto-rows-fr gap-10 w-full',
+          { 'opacity-50': isCompleted }
+        )}
+      >
         <Controller
           control={control}
           name="answers"
           render={({ field }) => (
-            <DragAndDropList values={field.value} onChange={field.onChange} />
+            <DragAndDropList
+              disabled={isCompleted}
+              values={field.value}
+              onChange={field.onChange}
+            />
           )}
         />
         <Controller
           control={control}
           name="relations"
           render={({ field }) => (
-            <DragAndDropList values={field.value} onChange={field.onChange} />
+            <DragAndDropList
+              disabled={isCompleted}
+              values={field.value}
+              onChange={field.onChange}
+            />
           )}
         />
       </div>

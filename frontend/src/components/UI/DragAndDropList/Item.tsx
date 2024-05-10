@@ -14,9 +14,10 @@ export const styles = {
 
 interface IItemProps {
   value: IValue;
+  disabled: boolean;
 }
 
-export const Item: FC<IItemProps> = ({ value }) => {
+export const Item: FC<IItemProps> = ({ value, disabled }) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [togglePointer, setTogglePointer] = useState(false);
   const pointerToggleHandler = () => {
@@ -28,17 +29,22 @@ export const Item: FC<IItemProps> = ({ value }) => {
       key={value.id}
       onDragEnd={pointerToggleHandler}
       onDragStart={pointerToggleHandler}
-      drag="y"
+      drag={disabled ? false : 'y'}
       as="div"
     >
       <Card
         className={clsx({
           [styles.item_active]: togglePointer,
           [styles.item]: !togglePointer,
+          'cursor-default': disabled,
         })}
       >
         <CardBody>
-          {<p className="pb-5">{value.text}</p>}
+          {
+            <p draggable={false} className="pb-5">
+              {value.text}
+            </p>
+          }
           {value.image_display && (
             <Image
               ref={imageRef}

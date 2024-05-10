@@ -52,11 +52,18 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
 
   const { mutate } = useCheckAnswerMutation({
     onSuccess: (data) => {
-      data.data.ok ? setRadioColor('success') : setRadioColor('danger');
+      if (testMode === 'training') {
+        data.data.ok ? setRadioColor('success') : setRadioColor('danger');
+      }
       setCompletedList({
         answers: getValues('answer'),
         questionId: question_id,
-        color: data.data.ok ? 'success' : 'danger',
+        color:
+          testMode === 'training'
+            ? data.data.ok
+              ? 'success'
+              : 'danger'
+            : 'primary',
       });
     },
   });
