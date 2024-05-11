@@ -14,6 +14,8 @@ interface CompletedItem {
 }
 
 interface ITestStore {
+  lastQuestionId: number;
+  setLastQuestionId: (lastQuestionId: number) => void;
   currentPage: number;
   setCurrentPage: (page: number) => void;
   totalPages: number;
@@ -30,6 +32,7 @@ export interface ITestStoreInitState {
   completedList: CompletedItem[];
   currentPage: number;
   totalPages: number;
+  lastQuestionId: number;
 }
 
 const initialState: ITestStoreInitState = {
@@ -37,12 +40,14 @@ const initialState: ITestStoreInitState = {
   completedList: [],
   currentPage: 1,
   totalPages: 0,
+  lastQuestionId: 0,
 };
 
 export const useTestStore = create<ITestStore>()(
   persist(
     immer((set) => ({
       ...initialState,
+      setLastQuestionId: (lastQuestionId) => set({ lastQuestionId }),
       setTestMode: (testMode) => set({ testMode }),
       setTotalPages: (page) => set({ totalPages: page }),
       setCurrentPage: (page) => set({ currentPage: page }),

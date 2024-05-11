@@ -32,6 +32,7 @@ export const RelationAnswer: FC<IRelationAnwerProps> = ({
   const clearTest = useTestStore((state) => state.clear);
   const completedList = useTestStore((state) => state.completedList);
   const setCompletedList = useTestStore((state) => state.setCompletedList);
+  const lastQuestionId = useTestStore((state) => state.lastQuestionId);
 
   const currentQuestion = completedList.find((item) => item.questionId === id);
 
@@ -158,7 +159,7 @@ export const RelationAnswer: FC<IRelationAnwerProps> = ({
         >
           Подтвердить
         </Button>
-        {id === totalPages && (
+        {id === lastQuestionId && (
           <Link href="../testings">
             <Button
               variant="shadow"

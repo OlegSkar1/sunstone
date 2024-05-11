@@ -23,6 +23,7 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
   const testMode = useTestStore((state) => state.testMode);
   const clearTest = useTestStore((state) => state.clear);
   const completedList = useTestStore((state) => state.completedList);
+  const lastQuestionId = useTestStore((state) => state.lastQuestionId);
 
   const currentQuestion = completedList.find(
     (item) => item.questionId === question_id
@@ -155,7 +156,7 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
         >
           Подтвердить
         </Button>
-        {question_id === totalPages && (
+        {question_id === lastQuestionId && (
           <Link href="../testings" onClick={clearTest}>
             <Button variant="shadow" color="primary" className="text-white">
               Завершить

@@ -27,6 +27,7 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
   const testMode = useTestStore((state) => state.testMode);
   const completedList = useTestStore((state) => state.completedList);
   const clearTest = useTestStore((state) => state.clear);
+  const lastQuestionId = useTestStore((state) => state.lastQuestionId);
 
   const currentQuestion = completedList.find(
     (item) => item.questionId === question_id
@@ -122,7 +123,7 @@ export const SingleAnswer: FC<ISingleAnswersProps> = ({
         >
           Подтвердить
         </Button>
-        {question_id === totalPages && (
+        {question_id === lastQuestionId && (
           <Link href="../testings">
             <Button
               variant="shadow"

@@ -12,6 +12,7 @@ export default function Test({ id }: { id: string }) {
   const setTotalPages = useTestStore((state) => state.setTotalPages);
   const currentPage = useTestStore((state) => state.currentPage);
   const setCurrentPage = useTestStore((state) => state.setCurrentPage);
+  const setLastQuestionId = useTestStore((state) => state.setLastQuestionId);
 
   const query = searchStore((state) => state.search);
 
@@ -19,6 +20,9 @@ export default function Test({ id }: { id: string }) {
 
   useEffect(() => {
     if (testings) {
+      setLastQuestionId(
+        testings.data.questions[testings.data.questions.length - 1].id
+      );
       setTotalPages(testings.data.questions.length);
     }
   }, [testings]);

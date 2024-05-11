@@ -1,21 +1,13 @@
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Skeleton,
-} from '@nextui-org/react';
+import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import React, { FC } from 'react';
 
 interface IMaterialCardProps {
   card: Omit<MaterialModel, 'text'> | null;
 }
 export const MaterialCard: FC<IMaterialCardProps> = ({ card }) => {
-  const pathname = usePathname();
   const createTime = dayjs(card?.created_at).format('DD.MM.YYYY');
   const separateTitle =
     card?.title.substring(0, 50).length === card?.title.length

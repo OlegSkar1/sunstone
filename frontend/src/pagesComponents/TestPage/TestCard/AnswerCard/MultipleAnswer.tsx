@@ -24,6 +24,7 @@ export const MultipleAnswer: FC<IMultipleAnswersProps> = ({
   const testMode = useTestStore((state) => state.testMode);
   const clearTest = useTestStore((state) => state.clear);
   const completedList = useTestStore((state) => state.completedList);
+  const lastQuestionId = useTestStore((state) => state.lastQuestionId);
 
   const currentQuestion = completedList.find(
     (item) => item.questionId === question_id
@@ -120,7 +121,7 @@ export const MultipleAnswer: FC<IMultipleAnswersProps> = ({
         >
           Подтвердить
         </Button>
-        {question_id === totalPages && (
+        {question_id === lastQuestionId && (
           <Link href="../testings">
             <Button
               variant="shadow"
