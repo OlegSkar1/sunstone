@@ -104,8 +104,8 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
               className="max-w-[300px]"
               classNames={{
                 inputWrapper: `${
-                  testMode === 'training'
-                    ? currentQuestion && currentQuestion.ok
+                  testMode === 'training' && currentQuestion
+                    ? currentQuestion.ok
                       ? 'border-success'
                       : 'border-danger'
                     : 'border-default'
@@ -118,7 +118,8 @@ export const InputAnswer: FC<IInputAnswersProps> = ({
       <div className="flex items-center justify-center h-[20px]">
         <AnimatePresence mode="wait">
           {testMode === 'training' &&
-            (currentQuestion && currentQuestion.ok ? (
+            currentQuestion &&
+            (currentQuestion.ok ? (
               <motion.p
                 variants={animateFormError}
                 initial="hide"
