@@ -30,6 +30,7 @@ class UserQuestionTestStatisticsSerializer(serializers.ModelSerializer):
             "question",
             "question_type",
             "question_text",
+            "is_correct",
             "user_variant",
             "correct_answers",
         )
