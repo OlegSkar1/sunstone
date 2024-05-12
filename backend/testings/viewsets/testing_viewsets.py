@@ -122,15 +122,18 @@ class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
             "status_code": status.HTTP_200_OK,
         }
 
+        is_correct = provide_answer(user_answer, question)
+
         if test_mode == TestModes.EXAM:
             write_statistic_for_question(
                 user=request.user,
                 question=question,
                 user_answer=user_answer,
+                is_correct=is_correct,
             )
 
         return Response(
-            response_map[provide_answer(user_answer, question)]
+            response_map[is_correct]
             if test_mode == TestModes.TRAINING else {},
             status=response_map["status_code"]
         )

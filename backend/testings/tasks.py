@@ -7,7 +7,7 @@ from testings.models import UserTestStatistics, UserQuestionTestStatistics, Ques
 
 
 @shared_task
-def update_user_test_statistic(user, question, user_answer: str):
+def update_user_test_statistic(user, question, user_answer: str, is_correct: bool):
     """Запись статистики по ответу на вопрос от пользователя"""
 
     question = Question.objects.get(pk=question)
@@ -20,6 +20,7 @@ def update_user_test_statistic(user, question, user_answer: str):
     question_statistic = UserQuestionTestStatistics.objects.create(
         user_id=user,
         question=question,
+        is_correct=is_correct,
         test_statistic=main_test_statistic,
         user_variant=user_answer,
     )

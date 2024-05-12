@@ -54,6 +54,10 @@ class UserQuestionTestStatistics(models.Model):
         on_delete=models.CASCADE,
         related_name="question_statistics",
     )
+    is_correct = models.BooleanField(
+        verbose_name="Верно",
+        default=False
+    )
     user_variant = models.CharField(
         verbose_name="Вариант пользователя",
         max_length=256,
