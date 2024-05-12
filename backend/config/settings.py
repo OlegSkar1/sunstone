@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "django_ckeditor_5",
     "corsheaders",
     "nested_admin",
+    "adminsortable2",
     # ThisApp
     "users.apps.UsersConfig",
     "sections.apps.SectionsConfig",

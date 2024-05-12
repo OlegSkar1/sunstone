@@ -32,6 +32,14 @@ class LessonDetailSerializer(serializers.ModelSerializer):
     author_email = serializers.ReadOnlyField(source="author.email", read_only=True)
     material_title = serializers.ReadOnlyField(source="material.title", read_only=True)
     youtube_link = serializers.URLField(validators=[YouTubeLinkValidator()])
+    next = serializers.SerializerMethodField()
+    previous = serializers.SerializerMethodField()
+
+    def get_next(self, obj) -> str | None:
+        return self.context.get("next")
+
+    def get_previous(self, obj) -> str | None:
+        return self.context.get("previous")
 
     class Meta:
         model = Lesson
@@ -45,4 +53,6 @@ class LessonDetailSerializer(serializers.ModelSerializer):
             "material_title",
             "material_id",
             "youtube_link",
+            "next",
+            "previous",
         )
