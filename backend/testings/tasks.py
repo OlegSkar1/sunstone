@@ -1,6 +1,9 @@
+import ast
+
 from celery import shared_task
 
-from testings.models import UserTestStatistics, UserQuestionTestStatistics, Question
+from testings.constants import QuestionTypes
+from testings.models import UserTestStatistics, UserQuestionTestStatistics, Question, Answer, Relation
 
 
 @shared_task

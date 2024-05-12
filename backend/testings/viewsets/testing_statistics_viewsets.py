@@ -41,6 +41,7 @@ class TestingStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
                     .select_related(
                         "user",
                         "testing",
+                        "testing__lesson",
                     )
                     .prefetch_related(
                         "userquestionteststatistics_set",

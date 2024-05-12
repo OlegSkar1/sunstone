@@ -27,7 +27,14 @@ def provide_answer(user_answer: str | list[dict], question: Question):
             return not (true_answers ^ user_answers)
 
         case QuestionTypes.INPUT:
-            return user_answer == question.answers.filter(is_correct=True).first().text
+            return (
+                question.answers
+                .filter(
+                    is_correct=True,
+                    text__icontains=str(user_answer).strip(),
+                )
+                .exists()
+            )
 
         case QuestionTypes.RELATION:
             answers = list(
