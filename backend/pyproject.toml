@@ -30,6 +30,7 @@ django-cors-headers = "^4.3.1"
 celery = "^5.3.6"
 redis = "^5.0.3"
 django-nested-admin = "^4.0.2"
+django-admin-sortable2 = "^2.1.10"
 
 
 [tool.poetry.group.test.dependencies]

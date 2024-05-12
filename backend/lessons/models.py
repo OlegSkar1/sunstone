@@ -46,6 +46,12 @@ class Lesson(models.Model, metaclass=MultiImageMeta):
         null=True,
     )
 
+    order = models.PositiveIntegerField(
+        verbose_name="Порядок урока в материале",
+        default=0,
+        db_index=True,
+    )
+
     image_map = {
         "preview_display": Spec("preview", PREVIEW_WIDTH, PREVIEW_HEIGHT),
         "preview_thumbnail": Spec("preview", PREVIEW_WIDTH, PREVIEW_HEIGHT, crop=True)
@@ -57,3 +63,4 @@ class Lesson(models.Model, metaclass=MultiImageMeta):
     class Meta:
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
+        ordering = ["order"]
